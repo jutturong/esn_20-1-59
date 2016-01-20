@@ -94,12 +94,14 @@ var  $tb_main="04__monitoring";
            // //SELECT * FROM `laboratorytype`     join  table detial
            
            $tb=$this->tb_main;
-           $tbj1="laboratorytype2";
-           $tbj2="laboratorytype";
+           $tbj1="laboratorytype";
+           //$tbj2="laboratorytype";
+           $tbj2="laboratorytype_detail";
            
+         
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'95'));
-           $this->db->join($tbj1,$tb.".Lab=".$tbj1.".LabCode","left");
-           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode","left");
+          //  $this->db->join($tbj1,$tb.".Lab=".$tbj1.".LabCode");
            
            
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
@@ -107,8 +109,8 @@ var  $tb_main="04__monitoring";
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
-               
-                 array_push($va_arr,$row);
+                   $va_arr[]=$row;
+                // array_push($va_arr,$row);
             }
              
             
