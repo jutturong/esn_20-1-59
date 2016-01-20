@@ -29,3 +29,5 @@ var  $tb_main="04__monitoring";
 #------------------- main_eeg  views ----------------------#
 
           <th field="Lab_detail">Lab</th>
+		or
+        { field:'Lab_detail',title:'Lab',width:100   },
