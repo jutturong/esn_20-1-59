@@ -48,9 +48,9 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = '202.12.97.33';
-$db['default']['username'] = 'drugstore';
-$db['default']['password'] = 'sdnqozsz';
+$db['default']['hostname'] = '';
+$db['default']['username'] = '';
+$db['default']['password'] = '';
 $db['default']['database'] = 'drugstore3';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
