@@ -35,7 +35,8 @@
        columns:[[
             { field:'MonitoringDate',title:'Date',width:100   },
             { field:'HN',title:'HN',width:100   },
-            { field:'Lab',title:'Lab',width:100   },
+          //  { field:'Lab',title:'Lab',width:100   },
+             { field:'Lab_detail',title:'Lab',width:100   },
             { field:'Value',title:'Value',width:100   },
             
                ]],
