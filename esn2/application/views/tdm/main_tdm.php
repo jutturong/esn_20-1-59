@@ -28,7 +28,8 @@
        columns:[[
             { field:'MonitoringDate',title:'MonitoringDate',width:100   },
             { field:'HN',title:'HN',width:80   },
-            { field:'Lab',title:'Lab',width:50   },
+           // { field:'Lab',title:'Lab',width:50   },
+             { field:'Lab_detail',title:'Lab',width:200   },
             { field:'AnalysisDate',title:'AnalysisDate',width:100   },
             { field:'Ward',title:'Ward',width:100 },
             { field:'Indication',title:'Indication',width:100 },

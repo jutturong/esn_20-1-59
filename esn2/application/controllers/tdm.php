@@ -28,7 +28,9 @@ var  $tb_main="13_tdm2";
        # http://localhost/ci/index.php/tdm/loadTdm/
        public  function loadTdm()
        {
-           $tb=$this->tb_main;
+             $tb=$this->tb_main;
+             $tbj2="laboratorytype_detail";
+             
           // $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
          
@@ -42,6 +44,8 @@ var  $tb_main="13_tdm2";
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             //$this->db->order_by('MonitoringDate','DESC');
+           
+             $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get($tb,10,0);
            $va_arr = array(); 
            foreach($objquery->result() as $row )
