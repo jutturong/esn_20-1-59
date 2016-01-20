@@ -106,7 +106,8 @@ function saveUser(){
     <th field="MonitoringDate" >MonitoringDate</th>
     <th field="HN">HN</th>
     <th field="Value">Value</th>
-    <th field="Lab">Lab</th>
+   <!-- <th field="Lab">Lab</th> -->
+     <th field="Lab_detail">Lab</th>
    
         
     </thead>   
