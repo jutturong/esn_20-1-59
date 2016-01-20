@@ -59,16 +59,17 @@ var  $tb_main="04__monitoring";
        public  function loadChem2()
        {
            $tb=$this->tb_main;
-           $tb_sub="laboratorytype";
+         //  $tb_sub="laboratorytype";
+            $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
          
            ###-------------------chem2     37 to 47
            $name=array(37,38,39,40,41,42,43,44,45,46,47);
            $this->db->where_in('Lab',$name);
             
-           
+            $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
-           $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
+        //   $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
