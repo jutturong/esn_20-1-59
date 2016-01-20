@@ -35,15 +35,16 @@ var  $tb_main="04__monitoring";
        public  function loadGeneral()
        {
            $tb=$this->tb_main;
-           $tb_sub="laboratorytype";
+       //    $tb_sub="laboratorytype";
+          $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
          
            $name=array(1,2,3,4,5,6,7);
            $this->db->where_in('Lab',$name);
             
-           
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
-           $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
+         //  $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
