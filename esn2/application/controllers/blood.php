@@ -38,22 +38,24 @@ var  $tb_main="04__monitoring";
        {
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
+             $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
          
            $name=array(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
            $this->db->where_in('Lab',$name);
             
-           
+              $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
-           $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
+           //$this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
+          
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
-               
-                 array_push($va_arr,$row);
+                $va_arr[]=$row;
+                // array_push($va_arr,$row);
             }
              
             
