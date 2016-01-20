@@ -26,9 +26,11 @@ var  $tb_main="04__monitoring";
        public  function loadIMG()
        {
            $tb=$this->tb_main;
+            $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
            $name=array(96,97,100);
            $this->db->where_in('Lab',$name);
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');

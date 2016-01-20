@@ -57,7 +57,8 @@ function destroyUser(){
     <thead>
     <th field="MonitoringDate" >Date</th>
      <th field="HN">HN</th>
-     <th field="Lab">Lab</th>    
+   <!--  <th field="Lab">Lab</th>   -->
+     <th field="Lab_detail">Lab</th>
     <th field="Value">Imaging Result</th>
    
         
