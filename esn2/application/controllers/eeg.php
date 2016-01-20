@@ -75,9 +75,12 @@ var  $tb_main="04__monitoring";
             */
        }
        
+
        public function  callEEG()
        {
           #http://localhost/ci/index.php/eeg/callEEG
+           #http://drugstore.kku.ac.th/esn2/index.php/eeg/callEEG
+           
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
                      //ตัวอย่างทดสอบ  CQ1312
@@ -88,10 +91,17 @@ var  $tb_main="04__monitoring";
              //$tb="04__monitoring";         
              //  $tb="04_monitoring";
              // $tb="monitoring_04";
+           // //SELECT * FROM `laboratorytype`     join  table detial
+           
            $tb=$this->tb_main;
            $tbj1="laboratorytype2";
+           $tbj2="laboratorytype";
+           
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'95'));
            $this->db->join($tbj1,$tb.".Lab=".$tbj1.".LabCode","left");
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode","left");
+           
+           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
            $va_arr = array(); 
