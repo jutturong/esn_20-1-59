@@ -1,0 +1,31 @@
+var  $tb_main="04__monitoring";
+
+#---------------- eeg contorl ----------------------------#         
+
+  $tb=$this->tb_main;
+
+           $tbj2="laboratorytype_detail";
+           
+         
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
+           $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'95'));
+      
+           
+           
+        
+            $this->db->order_by('MonitoringDate','DESC');
+           $va_arr = array(); 
+           foreach($objquery->result() as $row )
+            {
+                   $va_arr[]=$row;
+              
+            }
+             
+            
+             echo json_encode($va_arr);
+
+
+
+#------------------- main_eeg  views ----------------------#
+
+          <th field="Lab_detail">Lab</th>
