@@ -53,6 +53,25 @@ var  $tb_main="#mysql50#09-otherdrp";
             
              echo json_encode($va_arr);
        }
+       
+       public function  view_otherdrp()
+       {
+            // http://drugstore.kku.ac.th/esn2/index.php/otherdrp/view_otherdrp/09/07/2552
+            $s1=$this->uri->segment(3);
+            $s2=$this->uri->segment(4);
+            $s3=$this->uri->segment(5);
+            $dmy=$s1."/".$s2."/".$s3;
+            //echo $dmy;
+             $q=$this->db->get_where($this->tb_main,array("MonitoringDate"=>$dmy));
+              // $q=$this->db->get_where($this->tb_main);
+             foreach($q->result() as $row)
+             {
+                   $rows[]=$row;
+             }
+             echo  json_encode($rows);
+              
+       }
+       
        # http://localhost/ci/index.php/otherdrp/loadOtherdrpHN/ES0597
        public  function loadOtherdrpHN()
        {
