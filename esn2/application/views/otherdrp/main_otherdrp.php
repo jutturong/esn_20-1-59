@@ -173,8 +173,8 @@
              closed:false,
              iconCls:'icon-large-chart',
              buttons:[   
-                {  text:'<< Prev',handler:function(){  alert('t'); }     },
-                  { text:'Next >>', handler:function(){  alert('t'); }  },
+             //  {  text:'<< Prev',handler:function(){  alert('t'); }     },
+             //     { text:'Next >>', handler:function(){  alert('t'); }  },
                 {  text:'Close',iconCls:'icon-cancel', handler:function(){  $('#dia_drp').dialog('close');  } },        
              ]
          " 
@@ -190,9 +190,20 @@
                           url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp',
                           valueField:'MonitoringDate',
                           textField:'MonitoringDate',
-                          
+                          onSelect:function()
+                          {
+                                  var   d=$('#drp_date').combobox('getValue');
+                                //  alert(d);
+                                $.getJSON(  '<?=base_url()?>index.php/otherdrp/view_otherdrp/'  + d  ,function(data) 
+                                {   
+                                     $.each(data,function(v,k)
+                                     {  
+                                            //alert( v  +  k.HN  );  
+                                            $('#DRPselection3_view').combobox('setValue',k.DRPDrug3);
+                                     });
+                                });
+                          }
                        "
-                       
                        />
                 
                
@@ -201,7 +212,7 @@
         </div>
         <div style="padding: 10px;">
             <label>
-                Drug/Product : <input class="easyui-combobox"   style="width: 200px;height: 30px;" 
+                Drug/Product : <input class="easyui-combobox"   id="DRPselection3_view"  name="DRPselection3_view"  style="width: 200px;height: 30px;" 
                                       data-options="
                                       url:'<?=base_url()?>index.php/otherdrp/tb_drug',
                                       valueField:'Drug',
