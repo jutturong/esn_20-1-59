@@ -167,6 +167,129 @@
     <table id="dg_drp" class="easyui-datagrid">           
     </table>
     
+    <!--  Popup B.Ientity -->
+    <div class="easyui-dialog"  id="dia_drp"  style="width:750px;height: 500px;padding: 10px;left:30px;top:30px;"  title="B.Identify DRPs(Non Compliance) History"   
+         data-options=" 
+             closed:false,
+             iconCls:'icon-large-chart',
+             
+         " 
+         >
+        <div style="padding: 10px;">
+            <label>
+                Monitoring Date : <input class="easyui-datebox"  style="width:200px;height: 30px;"   />
+            </label>
+            
+        </div>
+        <div style="padding: 10px;">
+            <label>
+                Drug/Product : <input class="easyui-combobox"   style="width: 200px;height: 30px;" 
+                                      data-options="
+                                      url:'<?=base_url()?>index.php/otherdrp/tb_drug',
+                                      valueField:'Drug',
+                                      textField:'Drug',
+                                      mode:'remote',
+                                      
+                                      "
+                                      />
+            </label>
+        </div>
+        <div style="padding: 10px;">
+            <label>
+                Non Compliance Type : 
+                <input class="easyui-combobox"   style="width: 200px;height: 30px;" 
+                                      data-options="
+                                      url:'<?=base_url()?>index.php/otherdrp/tb_drug',
+                                      valueField:'Drug',
+                                      textField:'Drug',
+                                      mode:'remote',
+                                      
+                                      "
+                                      />
+                ร้อยละของความร่วมมือไม่ร่วมมือ : 20.0 
+                <a  href="javascript:void(0)" class="easyui-linkbutton"    style="width:100px;height: 50px;"  > แก้ไขร้อยละของความไม่ร่วมมือ </a>
+            </label>
+        </div>
+        
+         <div style="padding: 10px;">
+             
+             Action :   <input  type="radio"   name="action_drp"   value="1"> Prevent
+                           <input  type="radio"   name="action_drp"   value="2"> Correct
+        
+            
+        </div>
+        
+        <div style="padding: 10px;">
+            <label>
+                  Intervention :       
+            </label>
+                           
+        </div>
+        <div style="padding: 10px;">
+            <?=nbs(10)?>
+            <label>
+                   Patient                                
+            </label>
+            <?=nbs(70)?>
+            <label>
+                   Doctor
+            </label>
+            
+        </div>
+        <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Adjust for appropriate therapy due to health system
+            <input  type="checkbox" /> Add new medication
+            </label>
+        </div>
+        
+        <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Correct technique of administration
+            <input  type="checkbox" /> Adjust dosage reqimen
+            </label>
+        </div>
+        
+        <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Improve compliance
+            <input  type="checkbox" /> Confirm prescription
+            </label>
+        </div>
+        
+                <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Inform drug related problems
+            <input  type="checkbox" /> Discontinue medication
+            </label>
+        </div>
+        
+                        <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Life style modication
+            <input  type="checkbox" /> Inform drug related problems
+            </label>
+        </div>
+        
+         <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Monitor efficacy and toxicity
+            <input  type="checkbox" /> Suggest changing medication
+            </label>
+        </div>
+        
+                 <div style="padding: 10px;">
+            <label>
+            <input  type="checkbox" /> Prevention of Adverse drug reaction
+            <input  type="checkbox" /> Suggest laboratory
+            </label>
+        </div>
+        
+        
+    </div>
+     <!--  Popup B.Ientity -->
+    
+    
     <div id="win_drp" class="easyui-window" title="เพิ่มข้อมูล/แก้ไขข้อมูล Other DRPs" data-options="
          modal:true,
          closed:true,
@@ -214,7 +337,7 @@
                                         </select>
                                         
                                         <a href="#" class="easyui-linkbutton"  data-options=" iconCls:'icon-print' " >View</a>  
-                                        <a href="#"  class="easyui-linkbutton"  data-options=" iconCls:'icon-add' " >Add</a>
+                                        <a href="#"  class="easyui-linkbutton"  data-options=" iconCls:'icon-add' " onclick="$('#dia_drp').dialog('open');" >Add</a>
                                         
                                     </td>
                                 </tr>
