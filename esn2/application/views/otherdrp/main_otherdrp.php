@@ -172,12 +172,19 @@
          data-options=" 
              closed:false,
              iconCls:'icon-large-chart',
-             
+             buttons:[   
+                {  text:'<< Prev',handler:function(){  alert('t'); }     },
+                  { text:'Next >>', handler:function(){  alert('t'); }  },
+                {  text:'Close',iconCls:'icon-cancel', handler:function(){  $('#dia_drp').dialog('close');  } },        
+             ]
          " 
          >
         <div style="padding: 10px;">
             <label>
-                Monitoring Date : <input class="easyui-datebox"  style="width:200px;height: 30px;"   />
+                Monitoring Date : <input class="easyui-datebox"  id="drp_date" style="width:200px;height: 30px;" 
+                                         
+                                         
+                                         />
             </label>
             
         </div>
@@ -199,11 +206,15 @@
                 Non Compliance Type : 
                 <input class="easyui-combobox"   style="width: 200px;height: 30px;" 
                                       data-options="
-                                      url:'<?=base_url()?>index.php/otherdrp/tb_drug',
-                                      valueField:'Drug',
-                                      textField:'Drug',
-                                      mode:'remote',
-                                      
+                                      valueField:'value',
+                                      textField:'label',
+                                      data:[
+                                         { value:0,label:' No ' },
+                                         {  value:1,label:'Over dosage'    },
+                                         {  value:2,label:'Under dosage'    },
+                                         {  value:3,label:'Not compliance with the life style'    },
+                                         {  value:4,label:'Incorrect technique'    },
+                                      ]
                                       "
                                       />
                 ร้อยละของความร่วมมือไม่ร่วมมือ : 20.0 
@@ -285,6 +296,65 @@
             </label>
         </div>
         
+        <div style="padding: 10px">
+            <label>
+                 Response :
+            </label>
+            
+        </div>
+        
+        <div style="padding: 10px">
+            <label>
+               
+                <input type="radio"   name="drp_response"  /> Resolved
+                <input type="radio"   name="drp_response" /> Improved 
+                
+                
+                  <input class="easyui-textbox"  data-options=" multiline:true "  style="width:300px;height: 50px;"   />
+                  
+                <br>
+                
+                <input type="radio"  name="drp_im" /> Not Improved
+                <input type="radio"  name="drp_im" /> N/A
+                
+            </label>
+
+        </div>
+        
+          <div style="padding: 10px">
+              <label>
+                   Cause: 
+              </label>
+          </div>
+        
+        <div style="padding: 10px">
+            <label>
+               
+                <input type="checkbox"    />  สาเหตุจากตัวผู้ป่วย
+                <input type="checkbox"    />  สาเหตุจากโรค
+                <input type="checkbox"    />  สาเหตุจากยา
+            </label>
+        </div>
+        
+         <div style="padding: 10px">
+            <label>
+   
+                <input type="checkbox"    />  สาเหตุจากตัวผู้ดูแล
+                <input type="checkbox"    />  สาเหตุอื่นๆ
+                
+            </label>
+        </div>
+        
+                 <div style="padding: 10px">
+                     <label>
+                         ผู้ประเมิน : <input class="easyui-combobox"  style="width:200px;height: 30px;"  
+                                             data-options="
+                                             
+                                             "
+                                             />    
+                     </label>
+              </div>
+
         
     </div>
      <!--  Popup B.Ientity -->
