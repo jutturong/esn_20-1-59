@@ -6,7 +6,7 @@ class Otherdrp extends CI_Controller {
 var  $title=" Epilepsy Clinic Database | KhoenKean University "; //The Entrar-shadow Website form | w3layouts
 var  $name_app1="(Appendix 1 ) แบบบันทึกข้อมูลพื้นฐานของผู้ป่วยเมื่อเริ่มการรักษา";
 
-var  $tb_main="09-otherdrp";  
+var  $tb_main="#mysql50#09-otherdrp";  
 //var  $tb_main="otherdrp";
 
 
@@ -27,6 +27,7 @@ var  $tb_main="09-otherdrp";
        # http://localhost/ci/index.php/otherdrp/loadOtherdrp/
        public  function loadOtherdrp()
        {
+          // http://drugstore.kku.ac.th/esn2/index.php/otherdrp/loadOtherdrp/
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -528,6 +529,26 @@ Albumin
           
        }
        
+       public  function  tb_user()
+       {
+           //  http://drugstore.kku.ac.th/esn2/index.php/otherdrp/tb_user
+           $tb="user";
+           $q=trim($this->input->get_post("q"));
+           $this->db->like("UserName",$q);
+           $q=$this->db->get($tb);
+           foreach($q->result() as $row)
+           {
+                $rows[]=$row;
+           }
+           echo json_encode($rows);
+           
+       }
+       
+       public   function  view_drp()
+       {
+              $tb="";
+           
+       }
        public  function   tb_drug()
        {
            //  http://drugstore.kku.ac.th/esn2/index.php/otherdrp/tb_drug
