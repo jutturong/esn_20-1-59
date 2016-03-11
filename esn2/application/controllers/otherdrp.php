@@ -528,6 +528,20 @@ Albumin
           
        }
        
+       public  function   tb_drug()
+       {
+           //  http://drugstore.kku.ac.th/esn2/index.php/otherdrp/tb_drug
+             $tb="drug";
+             $q=trim($this->input->get_post("q"));
+             $this->db->like("Drug",$q);
+             $query=$this->db->get($tb);
+             foreach( $query->result() as $row )
+             {
+                 $rows[]=$row;
+             }
+             echo json_encode($rows);
+       
+       }
        public function delTDM()
        {
                 
