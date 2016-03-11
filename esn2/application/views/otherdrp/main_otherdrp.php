@@ -181,10 +181,21 @@
          >
         <div style="padding: 10px;">
             <label>
-                Monitoring Date : <input class="easyui-datebox"  id="drp_date" style="width:200px;height: 30px;" 
-                                         
-                                         
-                                         />
+                
+                 Monitoring Date :
+                 
+                <!-- url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp/',  -->
+                <input class="easyui-combobox"   id="drp_date"   style="width:200px;height: 30px;" 
+                       data-options="
+                          url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp',
+                          valueField:'MonitoringDate',
+                          textField:'MonitoringDate',
+                          
+                       "
+                       
+                       />
+                
+               
             </label>
             
         </div>
@@ -347,9 +358,21 @@
         
                  <div style="padding: 10px">
                      <label>
-                         ผู้ประเมิน : <input class="easyui-combobox"  style="width:200px;height: 30px;"  
+                         ผู้ประเมิน : <input class="easyui-combogrid"  style="width:200px;height: 30px;"  
                                              data-options="
-                                             
+                                                url:'<?=base_url()?>index.php/otherdrp/tb_user',
+                                             idField:'UserCode',
+                                              textField:'UserName'  ,
+                                              mode:'remote',
+                                             method:'post',
+                                             singleSelect:true,
+                                          
+                                              fitColumns:true,
+                                              columns : [[
+                                                {  field:'UserName', title:'UserName', },
+                                                {  field:'UserSurname',title:'UserSurname', },
+                                                
+                                              ]]
                                              "
                                              />    
                      </label>
@@ -406,7 +429,7 @@
                                                  <option value=8>Other</option>
                                         </select>
                                         
-                                        <a href="#" class="easyui-linkbutton"  data-options=" iconCls:'icon-print' " >View</a>  
+                                        <a href="#" class="easyui-linkbutton"  data-options=" iconCls:'icon-print' "  onclick=" $('#dia_drp').dialog('open');  " >View</a>  
                                         <a href="#"  class="easyui-linkbutton"  data-options=" iconCls:'icon-add' " onclick="$('#dia_drp').dialog('open');" >Add</a>
                                         
                                     </td>
