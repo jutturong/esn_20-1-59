@@ -194,12 +194,39 @@
                           {
                                   var   d=$('#drp_date').combobox('getValue');
                                 //  alert(d);
+                                
                                 $.getJSON(  '<?=base_url()?>index.php/otherdrp/view_otherdrp/'  + d  ,function(data) 
                                 {   
                                      $.each(data,function(v,k)
                                      {  
                                             //alert( v  +  k.HN  );  
-                                            $('#DRPselection3_view').combobox('setValue',k.DRPDrug3);
+                                            $('#DRPDrug3_view').combobox('setValue',k.DRPDrug3);
+                                            $('#DRPselection3_view').combobox('setValue',k.DRPselection3);
+                                            
+                                             var  Action3=k.Action3;
+                                              alert(Action3);
+                                              
+                                           if(   Action3 == 1  )
+                                           {
+                                                $('#Action3_drp_1').attr('checked',true);
+                                           }else if(     Action3 == 2  )
+                                           {
+                                                $('#Action3_drp_2').attr('checked',true);
+                                           }
+                                          
+                                           
+                                             
+                                             
+                                          
+                                            
+                                              
+                                              var  InterventionPT3_1= k.InterventionPT3_1;
+                                             // alert( InterventionPT3_1 );
+                                             if(   InterventionPT3_1 == 'Y' )
+                                             {
+                                                   $('#InterventionPT3-1_drp').attr('checked',true);   // Adjust for appropriate therapy due to health system
+                                             }
+                                              
                                      });
                                 });
                           }
@@ -212,7 +239,7 @@
         </div>
         <div style="padding: 10px;">
             <label>
-                Drug/Product : <input class="easyui-combobox"   id="DRPselection3_view"  name="DRPselection3_view"  style="width: 200px;height: 30px;" 
+                Drug/Product : <input class="easyui-combobox"   id="DRPDrug3_view"  name="DRPDrug3_view"  style="width: 200px;height: 30px;" 
                                       data-options="
                                       url:'<?=base_url()?>index.php/otherdrp/tb_drug',
                                       valueField:'Drug',
@@ -226,7 +253,7 @@
         <div style="padding: 10px;">
             <label>
                 Non Compliance Type : 
-                <input class="easyui-combobox"   style="width: 200px;height: 30px;" 
+                <input class="easyui-combobox"  id="DRPselection3_view" name="DRPselection3_view"  style="width: 200px;height: 30px;" 
                                       data-options="
                                       valueField:'value',
                                       textField:'label',
@@ -246,8 +273,8 @@
         
          <div style="padding: 10px;">
              
-             Action :   <input  type="radio"   name="action_drp"   value="1"> Prevent
-                           <input  type="radio"   name="action_drp"   value="2"> Correct
+             Action :   <input  type="radio" id="Action3_drp_1"      value="1"> Prevent
+             <input  type="radio"  id="Action3_drp_2"    value="2"> Correct
         
             
         </div>
@@ -271,7 +298,7 @@
         </div>
         <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Adjust for appropriate therapy due to health system
+                <input  type="checkbox"  id="InterventionPT3-1_drp"  name="InterventionPT3-1_drp" /> Adjust for appropriate therapy due to health system
             <input  type="checkbox" /> Add new medication
             </label>
         </div>
