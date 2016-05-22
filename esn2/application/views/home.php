@@ -128,9 +128,10 @@
          <div title="รายการยาทั้งหมด (05-treatment)" style="padding:10px">
          <ul class="easyui-tree" data-options="url:'',method:'get',animate:true"></ul>
 
+         <!--
          <a href="#" class="easyui-linkbutton" iconCls="icon-reload" onclick="insert_treatment()">Last Order</a>    
           <a href="#" class="easyui-linkbutton" iconCls="icon-print" onclick="call_drug1()">Medication Profile</a>
-
+        -->
 
 <div style="margin:10px 0;"></div>
 <!-- โหลดรายการยาทั้งหมด -->
@@ -262,7 +263,7 @@
             <?=$this->load->view("noncomp/main_noncomp")?>
             
         </div>
-        <div title="ARDs" style="padding:10px">
+        <div title="ADRs" style="padding:10px">
            
             <!--
             <ul class="easyui-tree" data-options="url:'',method:'get',animate:true">

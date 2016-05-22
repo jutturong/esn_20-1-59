@@ -2,7 +2,10 @@
 
 <!-- <div style="margin:20px 0;"></div> -->
 
-<table id="dg_app1" title=" (Appendix 1 ) แบบบันทึกข้อมูลพื้นฐานของผู้ป่วยเมื่อเริ่มการรักษา "  data-options="singleSelect:true,collapsible:true"></table>
+<table id="dg_app1" title=" (Appendix 1 ) แบบบันทึกข้อมูลพื้นฐานของผู้ป่วยเมื่อเริ่มการรักษา "  data-options="singleSelect:true,collapsible:false">
+    
+</table>
+
 
 <!--
 <div id="toolbar">

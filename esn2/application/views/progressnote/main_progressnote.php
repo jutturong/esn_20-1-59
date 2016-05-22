@@ -22,15 +22,12 @@
                 { field:'Progress',title:'Progress Note' },
             ]],
             toolbar:[
-                /*
                 { 
                      text:'เพิ่มข้อมูล',iconCls:'icon-add',handler:function()
                            {   
-                               $('#win_progress').window('open');
+                               $('#dia_progress').dialog('open');
                            }   
                 },
-                */
-               
                 { text:'Reload',iconCls:'icon-reload',handler:function(){  $('#dg_progress').datagrid('reload');  }     },
                 {
                     text:'ลบข้อมูล',iconCls:'icon-remove',handler:function()
@@ -64,6 +61,7 @@
                        //------------------------------------
                     }
                  },
+                 /*
                  {
                      text:'แก้ไขข้อมูล',iconCls:'icon-edit',handler:function()
                     {
@@ -71,12 +69,13 @@
                         if(row)
                         {
                                 $.messager.alert('STATUS','เรียกข้อมูลสำเร็จแล้ว','Info');
-                               //$('#dg_progress').datagrid('load');
+                                $('#dg_progress').datagrid('load');
                                 $('#fr_progress').form('load', '<?=base_url()?>index.php/progressnote/fetchprogress/' +  row.HN  + '/' + row.MonitoringDate );
                         }
                     } 
                      
                  }
+                */
             ]    
         });
     });
@@ -87,8 +86,8 @@
    {
       
                $('#fr_progress').form('submit',{
-                   //url:'<?=base_url()?>index.php/progressnote/insertprogress/',
-                   url:url,
+                    url:'<?=base_url()?>index.php/progressnote/insertprogress/',
+                 //  url:url,
                    onSubmit:function(data)
                     {
                         //alert('t');
@@ -109,9 +108,28 @@
                             
                         }
                         */
-                            $.messager.alert('Status',data,'Info');
-                            $('#dg_progress').datagrid('reload');
-                            $('#Progress').textbox('clear');
+
+                         $.messager.alert('Status',data,'Info');
+                         //  $('#dg_progress').datagrid('reload');
+                         //  $('#Progress').textbox('clear');
+                         $('#dia_progress').dialog('close');
+                         $('#dg_progress').datagrid({
+                                url:'<?=base_url()?>index.php/progressnote/loadprogressHN/' +   $('#HN_pro').textbox('getValue')  ,
+                                rownumbers:true,
+                                fitColumns:true,
+                                title:'Progress Note',
+                                iconCls:'icon-print',
+                                singleSelect:true,
+                                columns:[[
+                                    { field:'MonitoringDate',title:'MonitoringDate'  },
+                                    { field:'HN',title:'HN' },
+                                    { field:'From',title:'From' },
+                                    { field:'UserName',title:'ชื่อ' },           
+                                    { field:'UserSurname',title:'นามสกลุ' },
+                                    { field:'Progress',title:'Progress Note' },
+                                ]]
+                });
+                            
                     }
                });
   
@@ -131,9 +149,14 @@
 
 <body>
     
-  
+    <div class="easyui-dialog"  id="dia_progress" style="padding:10px;left:30px;top:100px;" title=" เพิ่มข้อมูล Progress Note "  
+         data-options="
+           iconCls:'icon-large-chart',
+           closed:true,
+         "
+         >
     <div style="padding:5px 0;">   
-        <form id="fr_progress"  method="post" enctype="multipart/form-data">
+        <form id="fr_progress"  class="easyui-form"  method="post" enctype="multipart/form-data">
         <table>
             <tr>
                 <td> HN :</td>
@@ -141,7 +164,7 @@
             </tr>
             <tr>
                 <td> MonitoringDate :</td>
-                <td>  <input class="easyui-datebox" id="MonitoringDate_pro" name="MonitoringDate_pro" data-options="required:false" ></input>   </td>
+                <td>  <input class="easyui-datebox" id="MonitoringDate_pro" name="MonitoringDate_pro" data-options="required:true" ></input>   </td>
             </tr>
             <tr>
                 <td>
@@ -168,9 +191,12 @@
             
             <tr>
                 <td colspan="2">
-                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'"  style="width:100px;height: 50px" onClick="insertProgress('<?=base_url()?>index.php/progressnote/insertprogress/')" >Insert</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'"  style="width:100px;height: 50px" onclick="insertProgress('<?=base_url()?>index.php/progressnote/insertprogress/')" >Insert</a>
+                    <!--
                      <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-man'"  style="width:100px;height: 50px" onClick="insertProgress('<?=base_url()?>index.php/progressnote/updateprogress/')" >Update</a>
+                     -->
                     <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload'" style="width:80px;height: 50px" onclick="clear_fr()">Clear</a>
+                    <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" style="width:80px;height: 50px" onclick="  $('#dia_progress').dialog('close');  ">Close</a>
                 </td>
             </tr>
             
@@ -179,7 +205,7 @@
             </form>
         
     </div>
-     
+    </div> 
         
     <table id="dg_progress" class="easyui-datagrid" style="width:1200px">
         

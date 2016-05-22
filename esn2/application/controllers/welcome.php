@@ -3,7 +3,7 @@
 
 class Welcome extends CI_Controller {
     
-    var  $title=" Epilepsy Clinic Database | KhoenKean University "; //The Entrar-shadow Website form | w3layouts
+    var  $title=" Epilepsy Clinic Database | KhonKaen University "; //The Entrar-shadow Website form | w3layouts
     var  $name_app1="(Appendix 1 ) แบบบันทึกข้อมูลพื้นฐานของผู้ป่วยเมื่อเริ่มการรักษา";
    
     
@@ -201,12 +201,64 @@ INFO;
            
         }
         
+        
+        #----------- รายการยาทั้งหมด (05-treatment) ---------------------------------
+          public  function call_treatment()
+        {
+             #http://drugstore.kku.ac.th/esn2/index.php/welcome/call_treatment/
+               $id_treatment=$this->uri->segment(3);
+               
+               
+               // $q=$this->input->get_post('q');
+                $tb="05_treatment"; 
+                
+              //  $this->db->like("Drug_ProductID",$q);
+                $q=$this->db->get_where($tb,array("id_treatment"=> $id_treatment));
+                foreach($q->result() as $row )
+                {
+                        $rows[]=$row;
+                    
+                }
+                echo  json_encode($rows);
+        }
+        public  function sr_treatment()
+        {
+             #http://drugstore.kku.ac.th/esn2/index.php/welcome/sr_treatment
+                $q=$this->input->get_post('q');
+                $tb="05_treatment"; 
+                $this->db->like("Drug_ProductID",$q);
+                $q=$this->db->get($tb,20);
+                foreach($q->result() as $row )
+                {
+                        $rows[]=$row;
+                    
+                }
+                echo  json_encode($rows);
+        }
         public  function  treatment() // เรียกดูรายการยาทั้งหมดจาก table  `05-treatment`
         {
+            #http://drugstore.kku.ac.th/esn2/index.php/welcome/treatment
+            
+             $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
+             
             $tb="05_treatment";
             $fname1="Clinic";
             $va1="Epilepsy Clinic";
-            $this->db->order_by("MonitoringDate","desc");
+            //$this->db->order_by("MonitoringDate","desc");
+            //id_treatment
+            $this->db->order_by("id_treatment","desc");
             //$objquery=$this->db->get($tb,10,0);          
             $objquery=$this->db->get($tb,10,0); 
             
@@ -223,6 +275,20 @@ INFO;
         
         public function insert_treatment()//บันทึกรายการยาทั้งหมด  $tb="05_treatment";
         {
+            
+             $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
             $MonitoringDate=htmlspecialchars($_REQUEST["MonitoringDate"]);          
             $Drug_ProductID=htmlspecialchars($_REQUEST["Drug_ProductID"]);
             $DosageRegimen=htmlspecialchars($_REQUEST["DosageRegimen"]);
@@ -241,8 +307,9 @@ INFO;
            $insert_ck= $this->db->insert($tb,$data);
            if (  $insert_ck   )
            {
-               $ant_ck="บันทึกสำเร็จ";
-               
+               //$ant_ck="บันทึกสำเร็จ";
+                     echo "1";  
+               /*
                echo <<<INFO
 <div style="padding:0 50px">
 <p>Date : $MonitoringDate </p>
@@ -252,17 +319,97 @@ INFO;
 <p>สถานะการบันทึก : $ant_ck </p>
 </div>
 INFO;
+               */
                
            }
            else
            {
-               $ant_ck="บันทึกไม่สำเร็จ";
+                 echo "0";
+                //$ant_ck="บันทึกไม่สำเร็จ";
            }
                        
 
        
 
         }
+        
+        function  fetch_treatment()
+        {
+            #http://drugstore.kku.ac.th/esn2/index.php/welcome/fetch_treatment/16384
+                   $id_treatment=$this->uri->segment(3);
+               if(    $id_treatment  >  0   )
+                   
+               {
+                     $tb="05_treatment";
+                     $this->db->order_by("id_treatment","DESC");
+                     $q=$this->db->get_where($tb,array("id_treatment"=>$id_treatment));
+                     foreach($q->result() as $row)
+                     {
+                          $rows[]=$row;
+                     }
+                     echo  json_encode($rows);
+               }
+            
+        }
+        
+        function update_tr()
+        {
+            #http://drugstore.kku.ac.th/esn2/index.php/welcome/update_tr
+              $id_treatment=trim($this->input->get_post("id_treatment"));
+             //echo "<br>";
+               $MonitoringDate=trim($_REQUEST["MonitoringDate"]);          
+             //echo "<br>";
+               $Drug_ProductID=trim($_REQUEST["Drug_ProductID"]);
+             //echo "<br>";
+               $DosageRegimen=trim($_REQUEST["DosageRegimen"]);
+             //echo "<br>";
+              $Amount=trim($_REQUEST["Amount"]);
+             //echo "<br>";
+             if(   $id_treatment  >  0  &&  !empty($id_treatment)   )
+             {
+                      $tb="05_treatment";
+                                        $data=array(
+                                  'MonitoringDate'=>$MonitoringDate,
+                                  'Drug_ProductID'=>$Drug_ProductID,
+                                  'DosageRegimen'=>$DosageRegimen,
+                                  'Amount'=>$Amount,
+                              );
+                          $this->db->where("id_treatment",$id_treatment);              
+                          $ck=$this->db->update($tb,$data);
+                          if( $ck )
+                          {
+                                echo "1";
+                          }
+                          else
+                          {
+                               echo "0";
+                          }
+                          
+                          
+             }
+            
+            
+        }
+        
+        function del_treatment()   #http://drugstore.kku.ac.th/esn2/index.php/welcome/del_treatment/16386
+        {
+              $id_treatment=$this->uri->segment(3);
+               if(    $id_treatment  >  0   )
+               {
+                    $tb="05_treatment";
+                    $this->db->where("id_treatment", $id_treatment );
+                    $ck=$this->db->delete($tb);
+                    if( $ck )
+                    {
+                         echo "1";
+                    }else
+                    {
+                         echo "0";
+                    }
+               }
+         
+        }
+        
         
         public function test2()
         {
@@ -283,6 +430,20 @@ INFO;
         
         public function  selProvince() // select จังหวัดทั้งหมด
         {
+            
+                         $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
             //SELECT * FROM cleft.province;
             $tb="province";
             $objquery=$this->db->get($tb);
@@ -297,6 +458,21 @@ INFO;
         
         public function  sqlAmphur() // select อำเภอ
         {
+            
+                         $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
+             
            $prov_id=$this->uri->segment(3);          
            $tb="amphur";
            $str="SELECT  *  FROM  $tb  WHERE  AMPHUR_CODE  LIKE('$prov_id%'); ";
@@ -312,6 +488,20 @@ INFO;
         } 
         public function sqldistrict()//เลือกอำเภอ
         {
+            
+             $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
             $tb="district";
             $DISTRICT_CODE=$this->uri->segment(3); 
             $str="SELECT  *  FROM  $tb  WHERE  DISTRICT_CODE  LIKE('$DISTRICT_CODE%'); ";
@@ -323,6 +513,140 @@ INFO;
                 $va_arr[]=$row;
             }
             echo json_encode($va_arr);
+        }
+        
+        public function saveEEG()
+        {
+             // echo "T";
+                  $HN_EEG= $this->input->get_post('HN_EEG');
+                //echo "<br>";
+                 $MonitoringDate_eeg=$this->input->get_post('MonitoringDate_eeg');
+              //  echo "<br>";
+                
+                if(    strlen( $MonitoringDate_eeg )  >  0  )
+                {
+                      $ex=explode("/",$MonitoringDate_eeg);
+                       $conv_date=$ex[2]."-".$ex[0]."-".$ex[1];
+                     // echo "<br>";
+                }
+                
+                 $Value_EEG=$this->input->get_post("va_eeg");
+                //echo "<br>";
+                 $Lab=95;
+               
+               
+                 /*
+                $data=array(
+                    'MonitoringDate'=>$conv_date,
+                    'HN'=>$HN_EEG,
+                    'Value'=>$Value_EEG,
+                    'Lab'=>$Lab,
+                );
+                
+                  $tb="04__monitoring";
+                  $ck=$this->db->insert($tb,$data);
+                  */
+                 
+                    $tb="04__monitoring";
+                    
+                    $this->db->set("MonitoringDate",$conv_date);
+                    $this->db->set("HN",$HN_EEG);
+                    $this->db->set("Value",$Value_EEG);
+                    $this->db->set("Lab",$Lab);
+                    $ck=$this->db->insert($tb);
+                  
+                  if( $ck )
+                  {
+                       echo "1";
+                  }
+                  else
+                  {
+                       echo "0";
+                  }
+        }
+     
+        
+        ##----------- EEG -----------------------------
+        function  call_hn_eeg()
+        {
+            //  http://drugstore.kku.ac.th/esn2/index.php/welcome/call_hn_eeg/ES0597
+            $tb="04__monitoring";
+            $tbj1="laboratorytype";
+            $tbj2="listvalue_eeg";
+            $HN=$this->uri->segment(3);
+           // $this->db->order_by("")
+            $this->db->join($tbj1,$tb.".Lab=".$tbj1.".LabCode","left");
+            $this->db->join($tbj2,$tb.".Value=".$tbj2.".id_value");
+            $q=$this->db->get_where($tb,array($tb.".HN"=>$HN,$tb.".Lab"=>"95"));
+            foreach($q->result() as $row)
+            {
+                $rows[]=$row;
+            }
+            echo  json_encode($rows);
+            
+        }
+        
+        function  del_eeg()
+        {
+            //  http://drugstore.kku.ac.th/esn2/index.php/welcome/del_eeg/ES0597
+               $tb="04__monitoring";
+               $date=$this->uri->segment(3);
+               $HN=$this->uri->segment(4);
+               $this->db->where("MonitoringDate",$date);
+               $this->db->where("HN",$HN);
+               $ck=$this->db->delete($tb);
+               if( $ck )
+               {
+                   echo "1";
+               }
+               else
+               {
+                   echo "0";
+               }
+        }
+        
+        #---------------- IMG-------------------------------------
+        function saveIMG()
+        {
+            //  http://drugstore.kku.ac.th/esn2/index.php/welcome/saveIMG
+              $HN_img= $this->input->get_post('HN_img'); 
+             //echo "<br>";
+                $MonitoringDate_img=$this->input->get_post('MonitoringDate_img');
+             //echo "<br>";
+                     if(    strlen( $MonitoringDate_img )  >  0  )
+                {
+                      $ex=explode("/",$MonitoringDate_img);
+                        $conv_date=$ex[2]."-".$ex[0]."-".$ex[1];
+                      //echo "<br>";
+                }
+        
+    
+            $Value_img=$this->input->get_post('Value_img');    
+         // echo "<br>";
+           //$Lab=96;  
+            $img_result=$this->input->get_post('img_result');
+        // echo "<br>";
+                
+                
+            $tb="04__monitoring";
+            
+           
+            $this->db->set('MonitoringDate', $conv_date );
+            $this->db->set('HN', $HN_img );
+            $this->db->set('Value', $img_result );
+           // $this->db->set('Lab', 96 );
+            $this->db->set('Lab', $Value_img );
+            $this->db->set('Clinic', 'Epilepsy Clinic' );           
+           $ck= $this->db->insert($tb);
+            if( $ck )
+            {
+                echo "1";
+            }else
+            {
+                echo "0";
+            }
+    
+                         
         }
      
         

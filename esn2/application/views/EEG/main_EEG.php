@@ -25,12 +25,13 @@ function saveUser(){
 				}
 			});
                         */
+                       
                        $('#fm_eeg').form('submit',{ url:url, 
                            success:function(result)
                            {  
                               // $.messager.alert('Info',result,'info');
                                $('#tb_EEG').datagrid('reload');
-                               $('#dlg_eeg').window('close');
+                               $('#dlg_eeg').dialog('close');
                            }   
                                                   });
 		}
@@ -105,67 +106,127 @@ function saveUser(){
     <thead>
     <th field="MonitoringDate" >MonitoringDate</th>
     <th field="HN">HN</th>
-    <th field="Value">Value</th>
+   <!-- <th field="Value">Value</th> -->
+    <th field="detail_eeg">EEG Result</th>
    <!-- <th field="Lab">Lab</th> -->
-     <th field="Lab_detail">Lab</th>
+    <!-- <th field="Lab_detail">Lab</th> -->
    
         
     </thead>   
 </table>
 
 <div id="toolbar_eeg">
-    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newUser()">เพิ่มข้อมูล</a>
+    <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="   $('#dlg_eeg').window('open');   ">เพิ่มข้อมูล</a>
    <!-- <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editUser()">แก้ไขข้อมูล</a> -->
-    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyUser()">ลบข้อมูล</a>   
+    <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="
+        //destroyUser()
+           // $('#tb_EEG').datagrid('reload');
+           var   row = $('#tb_EEG').datagrid('getSelected');
+           if( row )
+           {
+                //alert('t');
+                 var  MonitoringDate=row.MonitoringDate;
+                 var  HN=row.HN;
+                 var  url='<?=base_url()?>index.php/welcome/del_eeg/' + MonitoringDate + '/' + HN;
+                  //alert ( MonitoringDate + '/'  + HN );
+                  //alert( url );
+                  $.post(url,function(data)
+                  {
+                         //  alert(data);
+                         
+                                          if( data == '1' )
+                                         {
+                                                 $.messager.alert('สถานะการลบข้อมูล','ลบข้อมูลสำเร็จ','Info');
+                                                 $('#tb_EEG').datagrid('reload');
+                                                 
+                                                 //  var  url='http://drugstore.kku.ac.th/esn2/index.php/welcome/call_hn_eeg/ES0597'
+                                                 
+                                         }
+                                         else if( data == '0' )
+                                         {
+                                                 $.messager.alert('สถานะการลบข้อมูล','ลบข้อมูลล้มเหลว','Info');
+                                                 $('#tb_EEG').datagrid('reload');
+                                         }
+                  });
+               
+           }
+       
+       ">ลบข้อมูล</a>   
+    <a href="javascript:void(0)"  class="easyui-linkbutton"  iconCls="icon-reload"   onclick="  $('#tb_EEG').datagrid('reload');  "  >Reload</a>
 </div>
 
 
 
 
 
-<div id="dlg_eeg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
-     closed="true" buttons="#dlg-buttons" data-options="modal:true">
+<div id="dlg_eeg"  title=" EEG "  class="easyui-window" style="width:400px;height:280px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons" data-options="modal:false">
    
-    <form id="fm_eeg" method="post" novalidate>
-        <div class="fitem">
-            <label>HN : </label>
-           <!-- <input  class="easyui-textbox" id="HN_eeg" name="HN_eeg"   > -->
+    <form id="fr_eeg"   method="post"  enctype="multipart/form-data"  novalidate="novalidate" >
+          
+        <div style="padding: 10px 20px"  >
+           HN : 
+          
             <input class="easyui-textbox" style="width:30%" id="HN_EEG" name="HN_EEG" data-options="iconCls:'icon-man',readonly:true " required="require" >
             
+            
         </div>
-        <div class="fitem">
-            <label>Date : </label>
-            <input  class="easyui-datebox" id="MonitoringDate" name="MonitoringDate" required="true">
+          <div style="padding: 10px 20px"  >
+            <label>Date : 
+            <input  class="easyui-datebox" id="MonitoringDate_eeg" name="MonitoringDate_eeg" required="true">
+            </label>
         </div>
         
-        <div class="fitem">
-            <label>EEG Result : </label>
-            <select class="easyui-combobox"  style="width:200px;" id="Value_EEG" name="Value_EEG" required="true">
+          <div style="padding: 10px 20px"  >
+            <label>EEG Result : 
+            <select class="easyui-combobox"  style="width:200px;" id="va_eeg" name="va_eeg" required="true">
                 <option value="">Not done</option>
                 <option value="1">Position</option>
                 <option value="2">Negative</option>
                 
             </select>
+            </label>
+        </div>
+        
+        
+        <div style="padding: 10px 20px"  >
+            
+ 
+            
+            <input  type="submit"   onclick="
+                
+                
+                            $('#fr_eeg').form({
+                                url:'http://drugstore.kku.ac.th/esn2/index.php/welcome/saveEEG',
+                                 success:function(data){
+                                        //alert(data);
+                                     // $('#tb_EEG').datagrid('reload');
+                                         if( data == '1' )
+                                         {
+                                                 $.messager.alert('สถานะการบึกทึกข้อมูล','บันทึกข้อมูลสำเร็จ','Info');
+                                                 $('#tb_EEG').datagrid('reload');
+                                                 
+                                                 //  var  url='http://drugstore.kku.ac.th/esn2/index.php/welcome/call_hn_eeg/ES0597'
+                                                 
+                                         }
+                                         else if( data == '0' )
+                                         {
+                                                 $.messager.alert('สถานะการบึกทึกข้อมูล','บันทึกข้อมูลล้มเหลว','Info');
+                                                 $('#tb_EEG').datagrid('reload');
+                                         }
+                                 }
+                            });
+                          
+                            
+                    "  />
+            
+            <a href="javascript:void(0)" class="easyui-linkbutton"  data-options=" iconCls:'icon-cancel' "  onclick=" $('#dlg_eeg').window('close');  "  > Close </a>
+            
             
         </div>
         
-        <!--
-        <div class="fitem">
-            <label>Last Name:</label>
-            <input name="lastname" class="easyui-textbox" required="true">
-        </div>
-        <div class="fitem">
-            <label>Phone:</label>
-            <input name="phone" class="easyui-textbox">
-        </div>
-        <div class="fitem">
-            <label>Email:</label>
-            <input name="email" class="easyui-textbox" validType="email">
-        </div>
-        -->
+
     </form>
+    
 </div>
-<div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="saveUser()" style="width:90px">Save</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_eeg').dialog('close')" style="width:90px">Cancel</a>
-</div>
+

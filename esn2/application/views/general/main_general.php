@@ -3,16 +3,7 @@
 <script type="text/javascript">
     function submitGEN()
     {
-        //$.messager.alert('t');
-        /*
-        $('#fr_general').form({
-            url:'<?=base_url()?>index.php/general/saveGEN',
-            success:function(){
-                alert('t');
-            }
-            
-        });
-        */
+
         $('#fr_general').form('submit',{
             url:'<?=base_url()?>index.php/general/saveGEN',
             //http://localhost/ci/index.php/general/saveGEN
@@ -33,6 +24,7 @@
 <table id="dg_general" class="easyui-datagrid" data-options=" 
        iconCls:'icon-print',
        url:'<?=base_url()?>index.php/general/loadGeneral/',
+       singleSelected:true,
        columns:[[
             { field:'MonitoringDate',title:'Date',width:100   },
             { field:'HN',title:'HN',width:100   },

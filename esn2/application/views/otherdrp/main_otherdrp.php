@@ -12,13 +12,21 @@
         function  savedrp(url)  //savedrp
         {
             $('#fr_drp').form('submit',{
-                //url: '<?=base_url()?>index.php/adr/insertADR/' ,
+                //url: '<?=base_url()?>index.php/adr/insertdrp/' ,
                 url:url ,
                 success:function(result)
                 {
-                     //alert(result);
-                      $("#win_drp").window('close');
-                      $('#dg_drp').datagrid('reload');
+                      //alert(result);
+                      if( result  == '1' )
+                      {
+                           $.messager.alert('สถานะการบันทึก','บันทึกข้อมูลสำเร็จ','Info');    
+                      }
+                      else if(   result == '0' )
+                      {
+                            $.messager.alert('สถานะการบันทึก','บันทึกข้อมูลล้มเหลว','Error');    
+                       }
+                    //  $("#win_drp").window('close');
+                     $('#dg_drp').datagrid('reload');
                 }
             });
         }
@@ -47,11 +55,14 @@
             columns:[[ 
             { field:'HN',title:'HN'   },
             { field:'MonitoringDate',title:'MonitoringDate'  },
-            { field:'DRPselection3',title:'Other DRPs' },
+           // { field:'DRPselection3',title:'Other DRPs' },
+            { field:'selectiondetail',title:'Other DRPs' },
             { field:'DRPDrug3',title:'Drug/Product' },
             { field:'DRPDetail3',title:'Detail' },
-            { field:'Action3',title:'Action' },
-            { field:'Response3',title:'Result' },
+            //{ field:'Action3',title:'Action' },
+             { field:'action_detail',title:'Action' }, 
+           // { field:'Response3',title:'Result' },
+             { field:'result_detail',title:'Result' },
             { field:'ResponseDetail3',title:'Result Detail' },
             { field:'followup',title:'followup' },
             { field:'week',title:'week' },
@@ -170,7 +181,7 @@
     <!--  Popup B.Ientity -->
     <div class="easyui-dialog"  id="dia_drp"  style="width:750px;height: 500px;padding: 10px;left:30px;top:30px;"  title="B.Identify DRPs(Non Compliance) History"   
          data-options=" 
-             closed:false,
+             closed:true,
              iconCls:'icon-large-chart',
              buttons:[   
              //  {  text:'<< Prev',handler:function(){  alert('t'); }     },
@@ -187,15 +198,15 @@
                 <!-- url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp/',  -->
                 <input class="easyui-combobox"   id="drp_date"   style="width:200px;height: 30px;" 
                        data-options="
-                          url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp',
+                        //  url:'<?=base_url()?>index.php/otherdrp/loadOtherdrp/'  +   $('#HN_drp').textbox('getValue')   ,
+                        url:'<?=base_url()?>index.php/otherdrp/hn_dmy_other/ab3540/'   +    $('#HN_drp').textbox('getValue')   ,
                           valueField:'MonitoringDate',
                           textField:'MonitoringDate',
                           onSelect:function()
                           {
                                   var   d=$('#drp_date').combobox('getValue');
                                 //  alert(d);
-                                
-                                $.getJSON(  '<?=base_url()?>index.php/otherdrp/view_otherdrp/'  + d  ,function(data) 
+                                $.getJSON(  '<?=base_url()?>index.php/otherdrp/view_otherdrp/'  +  d   +   '/'   +   $('#HN_drp').textbox('getValue')    ,function(data) 
                                 {   
                                      $.each(data,function(v,k)
                                      {  
@@ -204,7 +215,7 @@
                                             $('#DRPselection3_view').combobox('setValue',k.DRPselection3);
                                             
                                              var  Action3=k.Action3;
-                                              alert(Action3);
+                                            //  alert(Action3);
                                               
                                            if(   Action3 == 1  )
                                            {
@@ -214,19 +225,139 @@
                                                 $('#Action3_drp_2').attr('checked',true);
                                            }
                                           
-                                           
-                                             
-                                             
-                                          
-                                            
-                                              
                                               var  InterventionPT3_1= k.InterventionPT3_1;
                                              // alert( InterventionPT3_1 );
                                              if(   InterventionPT3_1 == 'Y' )
                                              {
                                                    $('#InterventionPT3-1_drp').attr('checked',true);   // Adjust for appropriate therapy due to health system
                                              }
+                                          
+                                             
+                                             
+                                             var  InterventionPT3_2=k.InterventionPT3_2;
+                                         //  alert(InterventionPT3_2);
+                                             if(    InterventionPT3_2 == 'Y'  )
+                                             {
+                                                 $('#InterventionPT3_2_drp').attr('checked',true);    //Correct technique of administration
+                                             }
+                                    
+                                              var   InterventionPT3_3=k.InterventionPT3_3;
+                                              //alert(InterventionPT3_3);
+                                              if(  InterventionPT3_3 == 'Y'  )
+                                              {
+                                                  $('# InterventionPT3_3_drp').attr('checked',true); // Improve compliance
+                                              }
                                               
+                                              var InterventionPT3_4=k.InterventionPT3_4;  // Inform drug related problems
+                                            //  alert(InterventionPT3_4);
+                                               if(  InterventionPT3_4  == 'Y' )
+                                               {
+                                                   $('#InterventionPT3_4_drp').attr('checked',true); 
+                                               }
+                                             
+                                               var   InterventionPT3_5=k.InterventionPT3_5;  // Life style modication
+                                               //alert( InterventionPT3_5 );
+                                               if( InterventionPT3_5 == 'Y'  )
+                                               {
+                                                   $('#InterventionPT3_5_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionPT3_6=k.InterventionPT3_6;  //Monitor efficacy and toxicity 
+                                             //  alert(InterventionPT3_6);
+                                               //InterventionPT3_6_drp
+                                               if(  InterventionPT3_6 == 'Y'  )
+                                               {
+                                                   $('#InterventionPT3_6_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionPT3_7=k.InterventionPT3_7;  //Prevention of Adverse drug reaction
+                                               //InterventionPT3_7_drp
+                                              // alert( InterventionPT3_7   );
+                                               if( InterventionPT3_7 == 'Y' )
+                                               {
+                                                    $('#InterventionPT3_7_drp').attr('checked',true);
+                                               }
+                                               
+                                               var   InterventionDoctor3_1=k.InterventionDoctor3_1;
+                                             //  alert( InterventionDoctor3_1);
+                                               if(  InterventionDoctor3_1 == 'Y'  )
+                                               {
+                                                  $('#InterventionDoctor3_1_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionDoctor3_2=k.InterventionDoctor3_2; //Adjust dosage reqimen
+                                             //  alert(  InterventionDoctor3_2  );
+                                               if(   InterventionDoctor3_2  == 'Y'  )
+                                               {
+                                                   $('#InterventionDoctor3_2_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionDoctor3_3=k.InterventionDoctor3_3;   //Confirm prescription 
+                                               //alert(   InterventionDoctor3_3  );
+                                               if(   InterventionDoctor3_3  == 'Y'  )
+                                               {
+                                                    $('#InterventionDoctor3_3_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionDoctor3_4=k.InterventionDoctor3_4;  //Discontinue medication
+                                             //  alert(  InterventionDoctor3_4  );
+                                                 if(     InterventionDoctor3_4  == 'Y'  )
+                                                 {
+                                                         $('#InterventionDoctor3_4_drp').attr('checked',true);
+                                                 }
+                                              
+                                               var   InterventionDoctor3_5=k.InterventionDoctor3_5;
+                                             //  alert(InterventionDoctor3_5);
+                                               if(  InterventionDoctor3_5_drp  == 'Y'  )
+                                               {
+                                                   $('#InterventionDoctor3_5_drp').attr('checked',true);   
+                                               }
+                                              
+                                               var  InterventionDoctor3_6=k.InterventionDoctor3_6;  //Suggest changing medication
+                                              // alert(InterventionDoctor3_6);
+                                               if( InterventionDoctor3_6 == 'Y' )
+                                               {
+                                                    $('#InterventionDoctor3_6_drp').attr('checked',true);
+                                               }
+                                               
+                                               var  InterventionDoctor3_7=k.InterventionDoctor3_7;  //Suggest laboratory 
+                                              // alert(   InterventionDoctor3_7   );
+                                               if( InterventionDoctor3_7 == 'Y' )
+                                               {
+                                                    $('#InterventionDoctor3_7_drp').attr('checked',true);
+                                               }
+                                               
+                                              
+                                           
+                                               
+                                               /*
+                                               drp_response      Resolved
+                                               drp_improved       Improved 
+                                                drp_notim        Not Improved
+                                                drp_na          N/A
+                                                */
+                                                var  Response3=k.Response3;
+                                                if( Response3 == 1 )
+                                                {
+                                                     $('#drp_response').attr('checked',true);
+                                                }
+                                                else if (  Response3 == 2 )
+                                                {
+                                                     $('#drp_improved').attr('checked',true);
+                                                }
+                                                else if(   Response3 == 3 )
+                                                {
+                                                     $('#drp_notim').attr('checked',true);
+                                                }
+                                                else if(    Response3 == 4   )
+                                                {
+                                                      $('#drp_na').attr('checked',true);
+                                                }
+                                               
+                                               var   ResponseDetail3=k.ResponseDetail3;
+                                               //alert( ResponseDetail3 );
+                                               $('#ResponseDetail3_drp').textbox('setValue',ResponseDetail3); 
+                                               
                                      });
                                 });
                           }
@@ -299,49 +430,49 @@
         <div style="padding: 10px;">
             <label>
                 <input  type="checkbox"  id="InterventionPT3-1_drp"  name="InterventionPT3-1_drp" /> Adjust for appropriate therapy due to health system
-            <input  type="checkbox" /> Add new medication
+            <input  type="checkbox"  id="InterventionDoctor3_1_drp"  name="InterventionDoctor3_1_drp" /> Add new medication
             </label>
         </div>
         
         <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Correct technique of administration
-            <input  type="checkbox" /> Adjust dosage reqimen
+                <input  type="checkbox" id="InterventionPT3_2_drp"  name="InterventionPT3_2_drp"  /> Correct technique of administration
+                <input  type="checkbox"  id="InterventionDoctor3_2_drp"  name="InterventionDoctor3_2_drp"  /> Adjust dosage reqimen
             </label>
         </div>
         
         <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Improve compliance
-            <input  type="checkbox" /> Confirm prescription
+                <input  type="checkbox" id="InterventionPT3_3_drp"  name="InterventionPT3_3_drp" /> Improve compliance
+                <input  type="checkbox"   id="InterventionDoctor3_3_drp"   name="InterventionDoctor3_3_drp"  /> Confirm prescription
             </label>
         </div>
         
                 <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Inform drug related problems
-            <input  type="checkbox" /> Discontinue medication
+                <input  type="checkbox" id="InterventionPT3_4_drp"  name="InterventionPT3_4_drp" /> Inform drug related problems
+                <input  type="checkbox"  id="InterventionDoctor3_4_drp"  name="InterventionDoctor3_4_drp" /> Discontinue medication
             </label>
         </div>
         
                         <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Life style modication
-            <input  type="checkbox" /> Inform drug related problems
+                <input  type="checkbox"  id="InterventionPT3_5_drp"  name="InterventionPT3_5_drp" /> Life style modication
+                <input  type="checkbox"  id="InterventionDoctor3_5_drp"  name="InterventionDoctor3_5_drp"  /> Inform drug related problems
             </label>
         </div>
         
          <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Monitor efficacy and toxicity
-            <input  type="checkbox" /> Suggest changing medication
+                <input  type="checkbox"  id="InterventionPT3_6_drp"  name="InterventionPT3_6_drp" /> Monitor efficacy and toxicity
+                <input  type="checkbox"  id="InterventionDoctor3_6_drp"  name="InterventionDoctor3_6_drp" /> Suggest changing medication
             </label>
         </div>
         
                  <div style="padding: 10px;">
             <label>
-            <input  type="checkbox" /> Prevention of Adverse drug reaction
-            <input  type="checkbox" /> Suggest laboratory
+                <input  type="checkbox"  id="InterventionPT3_7_drp" name="InterventionPT3_7_drp" /> Prevention of Adverse drug reaction
+                <input  type="checkbox"  id="InterventionDoctor3_7_drp"  name="InterventionDoctor3_7_drp" /> Suggest laboratory
             </label>
         </div>
         
@@ -355,16 +486,16 @@
         <div style="padding: 10px">
             <label>
                
-                <input type="radio"   name="drp_response"  /> Resolved
-                <input type="radio"   name="drp_response" /> Improved 
+                <input type="radio"  id="drp_response"  name="drp_response"  /> Resolved
+                <input type="radio"  id="drp_improved"  name="drp_improved" /> Improved 
                 
                 
-                  <input class="easyui-textbox"  data-options=" multiline:true "  style="width:300px;height: 50px;"   />
+                <input class="easyui-textbox"  data-options=" multiline:true "  id="ResponseDetail3_drp"  name="ResponseDetail3_drp"  style="width:300px;height: 50px;"   />
                   
                 <br>
                 
-                <input type="radio"  name="drp_im" /> Not Improved
-                <input type="radio"  name="drp_im" /> N/A
+                <input type="radio" id="drp_notim"   name="drp_notim" /> Not Improved
+                <input type="radio"  id="drp_na" name="drp_na" /> N/A
                 
             </label>
 
@@ -427,7 +558,7 @@
          iconCls:'icon-large-smartart',
          size:'large',
          " 
-         style="width:600px;height:600px;padding:10px;">
+         style="width:600px;height:600px;padding:10px;top:10px;left:10px;">
                         <form id="fr_drp" class="easyui-form" method="post" data-options="novalidate:true">
                             <table cellpadding="5">
                                 <tr>
@@ -435,7 +566,7 @@
                                         HN :
                                     </td>
                                     <td>
-                                      <input class="easyui-textbox" style="width:70%;height: 30px" id="HN_drp" name="HN_drp" data-options="iconCls:'icon-man',readonly:true " required="require" >
+                                      <input class="easyui-textbox" style="width:70%;height: 30px" id="HN_drp" name="HN_drp" data-options="iconCls:'icon-man',readonly:true " required="requireed" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -543,12 +674,29 @@
                                        
                                        <tr>
                                            <td colspan="2">
-                                               <a id="btn_save_adr"  href="#" class="easyui-linkbutton" data-options=" iconCls:'icon-add',size:'large' "  style="height:30px" onclick="savedrp('<?=base_url()?>index.php/otherdrp/insertdrp')" > บันทึก </a>
+                                              <!-- <a id="btn_save_adr"  href="#" class="easyui-linkbutton" data-options=" iconCls:'icon-add',size:'large' "  style="height:30px" onclick="savedrp('<?=base_url()?>index.php/otherdrp/insertdrp')" > บันทึก </a> -->
+                                               <input  type="submit"   onclick="
+                                                       //alert('t');
+                                                       var    url='<?=base_url()?>index.php/otherdrp/insertdrp';
+                                                       savedrp(url);
+                                                       
+                                                       /*
+                                                           $('#fr_drp').form({
+                                                               url:'<?=base_url()?>index.php/otherdrp/insertdrp',
+                                                                      success:function(data)
+                                                                       {
+                                                                             alert(data);
+                                                                        }
+                                                           });    
+                                                           */
+                                                           
+                                                       "   />
                                                
                                                <!-- onclick="saveADR('<?=base_url()?>index.php/adr/insertADR/')" -->
-                                               
+                                            
+                                               <!--
                                                <a id="btn_save_adr"  href="#" class="easyui-linkbutton" data-options=" iconCls:'icon-edit',size:'large' "  style="height:30px" onclick="updatedrp('<?=base_url()?>index.php/otherdrp/updatedrp')" > แก้ไข </a> 
-                                               
+                                               -->
                                                
                                                <a href="#" class="easyui-linkbutton" data-options=" iconCls:'icon-remove',size:'large' "    style="height:30px"  onclick=" $('#win_drp').window('close');">ปิด </a>
                                                

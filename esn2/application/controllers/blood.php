@@ -29,6 +29,7 @@ var  $tb_main="04__monitoring";
          $this->load->helper('date');
          $this->load->model('user_model');
          $this->load->library('session');
+         $this->load->model('date');
          
          //in(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
          
@@ -36,16 +37,25 @@ var  $tb_main="04__monitoring";
        # http://localhost/ci/index.php/blood/loadBlood/
        public  function loadBlood()
        {
+        
+            #  http://drugstore.kku.ac.th/esn2i/index.php/blood/loadBlood/
+           $this->user_model->authensystem();
+            
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
              $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
          
            $name=array(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
+           
+           
+           // $tbj2="laboratorytype_detail";
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
+           
            $this->db->where_in('Lab',$name);
             
-              $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
-           $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
+             
+           $objquery=$this->db->get_where($tb,array($tb.'.Clinic'=>'Epilepsy Clinic'));
            //$this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
           
           
@@ -64,12 +74,15 @@ var  $tb_main="04__monitoring";
 public function saveBlood()
        {
          #http://localhost/ci/index.php/blood/saveBlood 
+         #http://drugstore.kku.ac.th/esn2/index.php/blood/saveBlood 
+         $this->user_model->authensystem();
     
            $tb=$this->tb_main; 
            $HN_blood= $this->input->get_post('HN_blood'); 
           //echo "<br>";
                 $MonitoringDate_blood=$this->input->get_post('MonitoringDate_blood');
-           $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_blood);  
+         //  $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_blood);  
+              $conv_MonitoringDate=$this->date->conv_date($MonitoringDate_blood);
           //echo "<br>";
            $hb=$this->input->get_post('hb'); //8
           //echo "<br>";  
@@ -242,7 +255,8 @@ public function saveBlood()
        
        public function delBlood()
        {
-                
+           #http://drugstore.kku.ac.th/esn2/index.php/blood/saveBlood 
+              $this->user_model->authensystem();  
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -290,6 +304,8 @@ public function saveBlood()
                     where  Lab = 95   and  HN='CQ1312'
             */
            //$HN="ES0597";
+            #http://drugstore.kku.ac.th/esn2/index.php/blood/callBlood_HN
+            $this->user_model->authensystem();
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;;
@@ -297,6 +313,8 @@ public function saveBlood()
           // $tb="monitoring_04";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96','HN'=>$HN));
            $name=array(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
+            $tbj2="laboratorytype_detail";
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $this->db->where_in('Lab',$name);
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));

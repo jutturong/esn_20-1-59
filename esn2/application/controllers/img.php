@@ -25,6 +25,10 @@ var  $tb_main="04__monitoring";
       # http://localhost/ci/index.php/img/loadIMG/
        public  function loadIMG()
        {
+           // http://drugstore.kku.ac.th/esn2/index.php/img/loadIMG
+           
+           $this->user_model->authensystem();
+           
            $tb=$this->tb_main;
             $tbj2="laboratorytype_detail";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -48,6 +52,8 @@ var  $tb_main="04__monitoring";
        public function  callIMG_HN()
        {
           #http://localhost/ci/index.php/img/callIMG_HN/HU3128
+           //http://drugstore.kku.ac.th/esn2/index.php/img/callIMG_HN/HU3128
+             $this->user_model->authensystem();
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
                      //ตัวอย่างทดสอบ  CQ1312
@@ -58,12 +64,15 @@ var  $tb_main="04__monitoring";
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;;
+           
           //  $tb="04_monitoring";
           // $tb="monitoring_04";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96','HN'=>$HN));
+            $tbj2="laboratorytype_detail";
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $name=array(96,97,100);
            $this->db->where_in('Lab',$name);
-           $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
+           $objquery=$this->db->get_where($tb,array($tb.'.Clinic'=>'Epilepsy Clinic',$tb.'.HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
@@ -83,6 +92,7 @@ var  $tb_main="04__monitoring";
        public  function imagingresult()
        {
           #http://localhost/ci/index.php/img/imagingresult
+             $this->user_model->authensystem();
            $tb="imagingresult";
            $obj=$this->db->get($tb);
            $va_arr = array(); 
@@ -99,7 +109,7 @@ var  $tb_main="04__monitoring";
        public function saveIMG()
        {
          #http://localhost/ci/index.php/img/saveIMG 
-              
+                $this->user_model->authensystem();
              
             $HN_img= $this->input->get_post('HN_img'); 
             //echo "<br>";
@@ -128,7 +138,7 @@ var  $tb_main="04__monitoring";
        
        public function delIMG()
        {
-                
+               $this->user_model->authensystem();   
                 
                 $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                 

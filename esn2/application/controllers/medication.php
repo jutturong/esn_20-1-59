@@ -18,15 +18,62 @@ var  $tb_main="medicationerror";
          parent::__construct();
          // $this->load->library('encrypt');
          $this->load->helper('date');
-         $this->load->model('user_model');
+         $this->load->model('user_model');  //$this->load->model('user_model');
          $this->load->library('session');
+          $this->load->model('date');
+         //$this->load->helper('uri');
          
          //in(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
          
        }
+
+       public  function  hn_medication()
+       {
+            # http://drugstore.kku.ac.th/esn2/index.php/medication/hn_medication/AB0216
+           
+           $this->user_model->authensystem();
+           
+           
+              $HN=$this->uri->segment(3);
+              $tb=$this->tb_main;
+              $q=$this->db->get_where($tb,array("HN"=>$HN));
+              foreach($q->result() as $row )
+              {
+                   $rows[]=$row;
+              }
+              echo  json_encode($rows);
+       }
+
+
+       # http://drugstore.kku.ac.th/esn2/index.php/medication/date_medication/AB0216/11/12/2551
+       public function  date_medication()
+       {
+         
+             $this->user_model->authensystem();
+               
+           $tb=$this->tb_main;
+           $HN=$this->uri->segment(3);
+         //echo "<br>";
+          $d1=$this->uri->segment(4);
+          $d2=$this->uri->segment(5);
+          $d3=$this->uri->segment(6);
+          $dmy=$d1."/".$d2."/".$d3;
+        #  $q=$this->db->get_where($tb ,array("HN"=>$HN,"MonitoringDate"=>$dmy));
+           $q=$this->db->get_where($tb ,array("HN"=>$HN));
+         // $q=$this->db->get($this->tb_main);
+          foreach($q->result() as $row)
+          {
+            $rows[]=$row;
+          }
+          echo json_encode($rows);
+       }
+
        # http://localhost/ci/index.php/medication/loadMedi/
        public  function loadMedi()
        {
+           #http://drugstore.kku.ac.th/esn2/index.php/medication/loadMedi
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -41,6 +88,16 @@ var  $tb_main="medicationerror";
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             //$this->db->order_by('MonitoringDate','DESC');
+           $tbj1="tb_drpselection";
+           $this->db->join($tbj1,$tb.".DRPselection4=".$tbj1.".id_drp","left");
+           
+            $tbr="tb_result";
+           $this->db->join($tbr,$tb.".Response4=".$tbr.".id_result","left");
+           
+             $tba="tb_action";
+             $this->db->join($tba,$tb.".Action4=".$tba.".id_action","left");
+           
+           
            $objquery=$this->db->get($tb,10,0);
            $va_arr = array(); 
            foreach($objquery->result() as $row )
@@ -52,9 +109,14 @@ var  $tb_main="medicationerror";
             
              echo json_encode($va_arr);
        }
-       # http://localhost/ci/index.php/medication/loadMediHN/ES0597
+       
        public  function loadMediHN()
        {
+          
+          #http://drugstore.kku.ac.th/esn2/index.php/medication/loadMediHN/ES0597
+             $this->user_model->authensystem();
+             
+             
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -70,7 +132,18 @@ var  $tb_main="medicationerror";
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             //$this->db->order_by('MonitoringDate','DESC');
            $HN=trim($this->uri->segment(3));
-           $objquery=$this->db->get_where($tb,array("HN"=>$HN),10,0);
+          
+           $tbj1="tb_drpselection";
+           
+           $this->db->join( $tbj1,$tb.'.DRPselection4='.$tbj1.".id_drp","left");
+           
+           $tbr="tb_result";
+           $this->db->join($tbr,$tb.".Response4=".$tbr.".id_result","left");
+           
+             $tba="tb_action";
+             $this->db->join($tba,$tb.".Action4=".$tba.".id_action","left");
+           
+           $objquery=$this->db->get_where($tb,array($tb.".HN"=>$HN),10,0);
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
@@ -85,6 +158,9 @@ var  $tb_main="medicationerror";
        
        public  function loadADRHN()
        {
+             $this->user_model->authensystem();
+             
+             
            $HN=$this->uri->segment(3);
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
@@ -116,6 +192,9 @@ var  $tb_main="medicationerror";
        # http://localhost/ci/index.php/chem/loadChem2/
        public  function loadChem2()
        {
+             $this->user_model->authensystem();
+             
+             
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -143,29 +222,31 @@ var  $tb_main="medicationerror";
        
        public function  insertADR()
        {
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main;
-           echo  $HN_adr=trim($this->input->get_post('HN_adr'));
-           echo "<br>";
-           echo  $MonitoringDate_adr=trim($this->input->get_post('MonitoringDate_adr'));
-           echo "<br>";
-           echo  $DRPselection2=trim($this->input->get_post('DRPselection2'));
-           echo  "<br>";
-           echo  $DRPDrug2=trim($this->input->get_post('DRPDrug2'));
-           echo "<br>";
-           echo $ADRDetail2=trim($this->input->get_post('ADRDetail2'));
-           echo "<br>";
-           echo  $Action2=trim($this->input->get_post('Action2'));
-           echo "<br>";
-           echo  $Response2=trim($this->input->get_post('Response2'));
-           echo "<br>";
-           echo  $ResponseDetail2=trim($this->input->get_post('ResponseDetail2'));
-           echo "<br>";
-           echo  $followup_adr=trim($this->input->get_post('followup_adr'));
-           echo "<br>";
-           echo  $week_adr=trim($this->input->get_post('week_adr'));
-           echo "<br>";
-           echo  $conv_week_adr=$this->user_model->databox_conv($week_adr);  
-           echo "<br>";
+           $HN_adr=trim($this->input->get_post('HN_adr'));
+           //echo "<br>";
+            $MonitoringDate_adr=trim($this->input->get_post('MonitoringDate_adr'));
+           //echo "<br>";
+             $DRPselection2=trim($this->input->get_post('DRPselection2'));
+           //echo  "<br>";
+            $DRPDrug2=trim($this->input->get_post('DRPDrug2'));
+          // echo "<br>";
+           $ADRDetail2=trim($this->input->get_post('ADRDetail2'));
+          // echo "<br>";
+            $Action2=trim($this->input->get_post('Action2'));
+           //echo "<br>";
+             $Response2=trim($this->input->get_post('Response2'));
+          // echo "<br>";
+            $ResponseDetail2=trim($this->input->get_post('ResponseDetail2'));
+           //echo "<br>";
+            $followup_adr=trim($this->input->get_post('followup_adr'));
+           //echo "<br>";
+             $week_adr=trim($this->input->get_post('week_adr'));
+          // echo "<br>";
+             $conv_week_adr=$this->date->conv_date( $week_adr );
+           //echo "<br>";
            
                 $this->db->set('HN', $HN_adr );
                 $this->db->set('MonitoringDate', $MonitoringDate_adr );
@@ -177,13 +258,22 @@ var  $tb_main="medicationerror";
                 $this->db->set('ResponseDetail2', $ResponseDetail2 );
                 $this->db->set('followup', $followup_adr );
                 $this->db->set('week', $conv_week_adr );              
-                $this->db->insert($tb);  
+               $ck= $this->db->insert($tb);  
+               if( $ck )
+               {
+                      echo "1";  
+               }
+               else
+               {
+                      echo "0";
+               }
             
        }
        
        #    /medication/insertMedi
        public function  insertMedi()
        {
+                    $this->user_model->authensystem();
                     
            echo $HN_medi=trim($this->input->get_post('HN_medi'));
            echo "<br>";
@@ -203,7 +293,7 @@ var  $tb_main="medicationerror";
            echo "<br>";
            $followup_medi=$this->input->get_post('followup_medi');  
            $week_medi=$this->input->get_post('week_medi');
-           $conv_week_medi=$this->user_model->databox_conv($week_medi);  
+          // $conv_week_medi=$this->user_model->databox_conv($week_medi);  
            
            
            
@@ -240,6 +330,8 @@ var  $tb_main="medicationerror";
        
        public  function  delMedi()
        {
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main;
            $HN=trim($this->uri->segment(3));
            $d=trim($this->uri->segment(4));
@@ -263,6 +355,8 @@ var  $tb_main="medicationerror";
        
        public function saveChem1()
        {
+             $this->user_model->authensystem();
+             
          #http://localhost/ci/index.php/blood/saveBlood   
            $tb=$this->tb_main; 
            $HN_chem1= $this->input->get_post('HN_chem1');          
@@ -459,6 +553,9 @@ Albumin
        {
          #http://localhost/ci/index.php/blood/saveBlood   
            //$tb=$this->tb_main; 
+            
+              $this->user_model->authensystem();
+              
            $tb="13_tdm2"; 
            $HN_tdm= $this->input->get_post('HN_tdm');          
            $MonitoringDate_tdm=$this->input->get_post('MonitoringDate_tdm');
@@ -530,7 +627,7 @@ Albumin
        
        public function delTDM()
        {
-                
+                $this->user_model->authensystem();  
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -571,6 +668,7 @@ Albumin
        public function delChem2()
        {
                 
+             $this->user_model->authensystem();
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -618,6 +716,10 @@ Albumin
                     where  Lab = 95   and  HN='CQ1312'
             */
            //$HN="ES0597";
+            
+              $this->user_model->authensystem();
+              
+              
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;;
@@ -658,6 +760,10 @@ Albumin
                     where  Lab = 95   and  HN='CQ1312'
             */
            //$HN="ES0597";
+           
+             $this->user_model->authensystem();
+             
+             
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;
@@ -689,6 +795,7 @@ Albumin
        {
            //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/
            
+             $this->user_model->authensystem();
            
           
            $HN=$this->uri->segment(3);
@@ -717,7 +824,9 @@ Albumin
        
        public function  fetchMedi()
        {
-           //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/                              
+           //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/        
+             $this->user_model->authensystem();
+             
            $HN=$this->uri->segment(3);                     
            //$MonitoringDate=$this->uri->segment(4);          
           $d=$this->uri->segment(4);
@@ -754,7 +863,9 @@ Albumin
        
        public function  updateMedi()
        {
-                    
+              
+             $this->user_model->authensystem();
+             
            echo $HN_medi=trim($this->input->get_post('HN_medi'));
            echo "<br>";
            echo $MonitoringDate_medi=trim($this->input->get_post('MonitoringDate_medi'));
@@ -828,6 +939,9 @@ $this->db->where('id', $id);
 $this->db->update('mytable', $data); 
             */
            
+             $this->user_model->authensystem();
+             
+             
            $tb=$this->tb_main;
            $HN_tdm=$this->input->get_post('HN_tdm');
            $MonitoringDate_tdm=$this->input->get_post('MonitoringDate_tdm');
@@ -862,6 +976,10 @@ $this->db->update('mytable', $data);
        
         public  function  updateADR()
         {
+            
+              $this->user_model->authensystem();
+              
+              
            $tb=$this->tb_main;
            $HN_adr=$this->input->get_post('HN_adr');
            $MonitoringDate_adr=$this->input->get_post('MonitoringDate_adr');
@@ -907,6 +1025,8 @@ $this->db->update('mytable', $data);
        
        function fetchADR()
        {
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main;
            $HN_adr=$this->uri->segment(3);
         

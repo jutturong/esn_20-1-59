@@ -21,13 +21,15 @@ var  $tb_main="13_tdm2";
          $this->load->helper('date');
          $this->load->model('user_model');
          $this->load->library('session');
-         
+         $this->load->model('date');
          //in(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
          
        }
        # http://localhost/ci/index.php/tdm/loadTdm/
        public  function loadTdm()
        {
+           # http://drugstore.kku.ac.th/esn2/index.php/tdm/loadTdm/
+           $this->user_model->authensystem();
              $tb=$this->tb_main;
              $tbj2="laboratorytype_detail";
              
@@ -63,6 +65,8 @@ var  $tb_main="13_tdm2";
        # http://localhost/ci/index.php/chem/loadChem2/
        public  function loadChem2()
        {
+           $this->user_model->authensystem();
+           
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -91,6 +95,7 @@ var  $tb_main="13_tdm2";
        
        public function saveChem1()
        {
+           $this->user_model->authensystem();
          #http://localhost/ci/index.php/blood/saveBlood   
            $tb=$this->tb_main; 
            $HN_chem1= $this->input->get_post('HN_chem1');          
@@ -285,39 +290,15 @@ Albumin
        
         public function saveTDM()
        {
-         #http://localhost/ci/index.php/blood/saveBlood   
-           //$tb=$this->tb_main; 
-           $tb="13_tdm2"; 
-           $HN_tdm= $this->input->get_post('HN_tdm');          
+            $this->user_model->authensystem();
+         # http://drugstore.kku.ac.th/esn2/index.php/tdm/saveTDM 
+         //  $tb="13_tdm2"; 
+           $tb=$this->tb_main;
+           $HN_tdm= $this->input->get_post('HN_tdm');    
            $MonitoringDate_tdm=$this->input->get_post('MonitoringDate_tdm');
-           $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_tdm);  
-
-    
-           /*
-          $drug=$this->input->get_post('drug');          
-          if( $drug != "" )
-          {             
-                $this->db->set('MonitoringDate', $conv_MonitoringDate );
-                $this->db->set('HN',  $HN_tdm );
-                $this->db->set('Lab', 34 );      
-                $this->db->insert($tb);             
-          }
-          */
-          
-           /*
-           $dmy_interpret=$this->input->get_post('dmy_interpret');
-           $conv_dmy_interpret=$this->user_model->databox_conv($dmy_interpret); 
-            if( $conv_dmy_interpret != "" )
-          {             
-                $this->db->set('MonitoringDate', $conv_MonitoringDate );
-                $this->db->set('HN',  $HN_tdm );
-                $this->db->set('HN',  $HN_tdm );   
-                $this->db->insert($tb);             
-          }
-          */
-           
+           //$conv_MonitoringDate=$this->date->conv_date( $MonitoringDate_tdm );
            $dmy_analysis=$this->input->get_post('dmy_analysis');
-           $conv_dmy_analysis=$this->user_model->databox_conv($dmy_analysis);          
+           $conv_dmy_analysis=$this->date->conv_date( $dmy_analysis);
            $ward=$this->input->get_post('ward');
            $Indication=$this->input->get_post('Indication'); 
            $vd=$this->input->get_post('vd');
@@ -326,16 +307,17 @@ Albumin
            $assessment=$this->input->get_post('assessment');
            $Interpretation=$this->input->get_post('Interpretation');
            $nb=$this->input->get_post('nb');
-           
            $drug=$this->input->get_post('drug');
            $dmy_interpret=$this->input->get_post('dmy_interpret');
-           $conv_dmy_interpret=$this->user_model->databox_conv($dmy_interpret); 
-           $followup=$this->input->get_post('followup');
-           $conv_followup=$this->user_model->databox_conv($followup);
-           $week=$this->input->get_post('week'); 
            
-                $this->db->set('MonitoringDate', $conv_MonitoringDate );
-                $this->db->set('HN',  $HN_tdm );
+           $conv_dmy_interpret=$this->date->conv_date( $dmy_interpret );
+           
+          $week=$this->input->get_post('week'); 
+          $followup=$this->input->get_post('followup');
+          $conv_followup=$this->date->conv_date($followup);
+          
+        
+                 $this->db->set('HN',  $HN_tdm );
                 $this->db->set('AnalysisDate',  $conv_dmy_analysis );  
                 $this->db->set('Ward',  $ward ); 
                 $this->db->set('Indication',  $Indication );
@@ -345,20 +327,40 @@ Albumin
                 $this->db->set('Assessment',  $assessment );              
                 $this->db->set('Interpretation',  $Interpretation );
                 $this->db->set('NB', $nb );
-                
                 $this->db->set('drug',$drug);
-                $this->db->set('dmy_interpret',$conv_dmy_interpret);
-                $this->db->set('dmy_followup',$conv_dmy_interpret);
                 $this->db->set('week',$week);
-                
-                $this->db->insert($tb);             
-         
-          
+                $this->db->set('MonitoringDate', $MonitoringDate_tdm ); 
+               $this->db->set('dmy_interpret', $conv_dmy_interpret );
+               $this->db->set('dmy_followup', $conv_followup );
+                $this->db->insert($tb);
+           
+      
+             
+          /*
+             $data=array(
+                          'HN' => $HN_tdm,
+                    //      'AnalysisDate'=>$conv_dmy_analysis,
+                    //      'Ward' => $ward,
+                   //       'Indication' =>  $Indication,
+                   //       'Vd'=>$vd,
+                  //        'Ke' =>  $ke,
+                    //      'T1div2'=>  $t1,
+                    //      'Assessment' => $assessment,
+                     //     'Interpretation' =>  $Interpretation,
+                     //    'NB' => $nb ,
+                    //      'drug' =>$drug,
+                   //       'week'=>$week,
+                     //     'MonitoringDate' =>$MonitoringDate_tdm,
+                    //      'dmy_interpret' => $conv_dmy_interpret,
+                   //       'dmy_followup' => $conv_followup,
+                      );
+                     $this->insert($tb,$data);
+               */
        }
        
        public function delTDM()
        {
-                
+           $this->user_model->authensystem();     
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -371,7 +373,7 @@ Albumin
                 
                
                 $this->db->where('MonitoringDate',$MonitoringDate );
-              //  $this->db->where('Lab',$Lab );
+            //    $this->db->where('Lab',$Lab );
                 $this->db->where('HN',$HN );
                 $ck=$this->db->delete($tb);
                
@@ -398,7 +400,7 @@ Albumin
        
        public function delChem2()
        {
-                
+              $this->user_model->authensystem(); 
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -438,6 +440,7 @@ Albumin
        
         public function  callTdm_HN()
        {
+            $this->user_model->authensystem();
           #http://localhost/ci/index.php/tdm/callTdm_HN/ES0597
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
@@ -459,10 +462,14 @@ Albumin
            
            //$this->db->where_in('Lab',$name);
            //$objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
-           $objquery=$this->db->get_where($tb,array('HN'=>$HN));
+           
+           $tbj2="laboratorytype_detail";
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
+           
+           $objquery=$this->db->get_where($tb,array($tb.'.HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
-            $this->db->order_by('MonitoringDate','DESC');
+            $this->db->order_by($tb.'.MonitoringDate','DESC');
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
@@ -478,6 +485,7 @@ Albumin
        
        public function  callChem2_HN()
        {
+           $this->user_model->authensystem();
           #http://localhost/ci/index.php/general/callGEN_HN/ES0597
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
@@ -515,6 +523,8 @@ Albumin
        
        public function  fetchTDM()
        {
+           $this->user_model->authensystem();
+           
            //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/
           
            $HN=$this->uri->segment(3);
@@ -543,6 +553,7 @@ Albumin
        
        public  function  updateTDM()
        {
+           $this->user_model->authensystem();
          //http://localhost/ci/index.php/tdm/updateTDM/ES0597/
          //  $HN=$this->uri->segment(3);
          //  $MonitoringDate=$this->uri->segment(4);

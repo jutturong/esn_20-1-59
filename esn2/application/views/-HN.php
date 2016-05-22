@@ -172,11 +172,8 @@
                                 columns:[[
                                             {   field:'MonitoringDate',title:'MonitoringDate' } ,
                                             {     field:'HN',title:'HN' },
-                                           // {      field:'Lab',title:'Lab' },
-                                            {      field:'Lab_detail',title:'Lab' },
-                                           // {      field:'Value',title:'Value' },
-                                            // <th field="epi_detail" >Value</th> 
-                                            {      field:'epi_detail',title:'Value' },
+                                            {      field:'Lab',title:'Lab' },
+                                            {      field:'Value',title:'Value' },
                    ]]
               })                                  
                    

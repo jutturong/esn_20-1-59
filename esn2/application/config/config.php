@@ -18,7 +18,7 @@
 #$config['base_url']	= "http://esn.com/CI200/";
 #$config['base_url']	= "http://www.esn.com/CI200/";
 
-$config['base_url']	= "";
+$config['base_url']	= "http://drugstore.kku.ac.th/esn2/";
 
 /*
 |--------------------------------------------------------------------------

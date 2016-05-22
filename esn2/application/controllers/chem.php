@@ -20,13 +20,17 @@ var  $tb_main="04__monitoring";
          $this->load->helper('date');
          $this->load->model('user_model');
          $this->load->library('session');
-         
+         $this->load->model('date');
          //in(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
          
        }
        # http://localhost/ci/index.php/chem/loadChem1/
        public  function loadChem1()
        {
+           #http://drugstore.kku.ac.th/esn2/index.php/chem/loadChem1
+           $this->user_model->authensystem();
+           
+           
            $tb=$this->tb_main;
          //  $tb_sub="laboratorytype";
          $tbj2="laboratorytype_detail";
@@ -58,6 +62,9 @@ var  $tb_main="04__monitoring";
        # http://localhost/ci/index.php/chem/loadChem2/
        public  function loadChem2()
        {
+           #http://drugstore.kku.ac.th/esn2/index.php/chem/loadChem2
+           $this->user_model->authensystem();
+           
            $tb=$this->tb_main;
          //  $tb_sub="laboratorytype";
             $tbj2="laboratorytype_detail";
@@ -87,12 +94,13 @@ var  $tb_main="04__monitoring";
        
        public function saveChem1()
        {
+           $this->user_model->authensystem();
          #http://localhost/ci/index.php/blood/saveBlood   
            $tb=$this->tb_main; 
            $HN_chem1= $this->input->get_post('HN_chem1');          
            $MonitoringDate_chem1=$this->input->get_post('MonitoringDate_chem1');
-           $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_chem1);  
-
+         //  $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_chem1);  
+             $conv_MonitoringDate=$this->date->conv_date($MonitoringDate_chem1);  
            /*               
 LabCode
 LabGroup
@@ -281,12 +289,14 @@ Albumin
        
         public function saveChem2()
        {
+            $this->user_model->authensystem();
          #http://localhost/ci/index.php/blood/saveBlood   
            $tb=$this->tb_main; 
            $HN_chem2= $this->input->get_post('HN_chem2');          
            $MonitoringDate_chem2=$this->input->get_post('MonitoringDate_chem2');
-           $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_chem2);  
-
+          #$conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_chem2);  
+          $conv_MonitoringDate=$this->date->conv_date($MonitoringDate_chem2);  
+          
         $chol=$this->input->get_post('tb');
          if( $chol != "" )
           {             
@@ -435,7 +445,7 @@ Albumin
        
        public function delChem1()
        {
-                
+                $this->user_model->authensystem();
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -475,7 +485,8 @@ Albumin
        
        public function delChem2()
        {
-                
+           
+             $this->user_model->authensystem();   
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -515,6 +526,7 @@ Albumin
        
         public function  callChem1_HN()
        {
+            $this->user_model->authensystem();
           #http://localhost/ci/index.php/general/callGEN_HN/ES0597
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
@@ -532,10 +544,10 @@ Albumin
            //$name=array(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
            $name=array(23,24,25,26,27,28,29,30,31,32,33,34,35,36);
            
-           
-           
+           $tbj2="laboratorytype_detail";
+            $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $this->db->where_in('Lab',$name);
-           $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
+           $objquery=$this->db->get_where($tb,array($tb.'.Clinic'=>'Epilepsy Clinic',$tb.'.HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
@@ -554,6 +566,7 @@ Albumin
        
        public function  callChem2_HN()
        {
+           $this->user_model->authensystem();
           #http://localhost/ci/index.php/general/callGEN_HN/ES0597
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
@@ -571,8 +584,10 @@ Albumin
            //$name=array(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22);
            // $name=array(23,24,25,26,27,28,29,30,31,32,33,34,35,36);
            $name=array(37,38,39,40,41,42,43,44,45,46,47);
+                $tbj2="laboratorytype_detail";
+                  $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $this->db->where_in('Lab',$name);
-           $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
+           $objquery=$this->db->get_where($tb,array($tb.'.Clinic'=>'Epilepsy Clinic',$tb.'.HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');

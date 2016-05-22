@@ -29,11 +29,15 @@ var  $tb_main="04__monitoring";
          $this->load->helper('date');
          $this->load->model('user_model');
          $this->load->library('session');
-         
+         $this->load->model('date');
        }
        # http://localhost/ci/index.php/general/loadGeneral/
        public  function loadGeneral()
        {
+           //http://drugstore.kku.ac.th/esn2/index.php/img/loadIMG/
+           # http://drugstore.kku.ac.th/esn2/index.php/general/loadGeneral/ 
+           $this->user_model->authensystem();
+            
            $tb=$this->tb_main;
        //    $tb_sub="laboratorytype";
           $tbj2="laboratorytype_detail";
@@ -42,6 +46,7 @@ var  $tb_main="04__monitoring";
            $name=array(1,2,3,4,5,6,7);
            $this->db->where_in('Lab',$name);
             
+           //$this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
          //  $this->db->join($tb_sub,$tb.'.Lab='.$tb_sub.'.LabCode','left');
@@ -60,6 +65,7 @@ var  $tb_main="04__monitoring";
        }
 public function saveGEN()
        {
+         $this->user_model->authensystem();
          #http://localhost/ci/index.php/img/saveIMG 
     /*      
 1=Weight
@@ -72,45 +78,19 @@ public function saveGEN()
    */
     
             $HN_gen= $this->input->get_post('HN_gen'); 
-          // echo "<br>";
             $MonitoringDate_gen=$this->input->get_post('MonitoringDate_gen');
-            
-            $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_gen);  
-           //echo "<br>";
-            
+        //    $conv_MonitoringDate=$this->user_model->databox_conv($MonitoringDate_gen);  
+            $conv_MonitoringDate= $this->date->conv_date($MonitoringDate_gen);
             $weight=$this->input->get_post('weight');//1=Weight
-           //echo "<br>";
-           
             $height=$this->input->get_post('height');//2=Height
-           //echo "<br>";
-           
             $bsa=$this->input->get_post('bsa'); //3=BSA
-           //echo "<br>";
-           
-           $rr=$this->input->get_post('rr'); //5=Respiratory Rate
-           //echo "<br>";
-           
+            $rr=$this->input->get_post('rr'); //5=Respiratory Rate
            $hr=$this->input->get_post('hr'); //6=Heart Rate
-           //echo "<br>";
-           
            $bp=$this->input->get_post('bp'); //7=Blood Pressure
-           //echo "<br>";
-           
            $bt=$this->input->get_post('bt'); //4=Body Temperature
-           //echo "<br>";
-            
            $tb=$this->tb_main; 
             
-            /*
-            $this->db->set('MonitoringDate', $conv_MonitoringDate );
-            $this->db->set('HN', $HN_img );
-            $this->db->set('Value', $img_result );
-           // $this->db->set('Lab', 96 );
-            $this->db->set('Lab', $Value_img );
-            $this->db->set('Clinic', 'Epilepsy Clinic' );           
-            $this->db->insert($tb);
-            */
-                    
+   
            /*      
 1=Weight
 2=Height
@@ -120,7 +100,7 @@ public function saveGEN()
 6=Heart Rate
 7=Blood Pressure
    */
-           
+
            if( $weight != "" )  //$weight=$this->input->get_post('weight');//1=Weight
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -128,8 +108,10 @@ public function saveGEN()
                 $this->db->set('Lab', 1 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $weight );
-                $this->db->insert($tb);
+                 $this->db->insert($tb);
            }
+             
+       
            if( $height != "" ) //$height=$this->input->get_post('height');//2=Height
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -137,8 +119,10 @@ public function saveGEN()
                 $this->db->set('Lab', 2 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $height );
-                $this->db->insert($tb);
+          
            }
+           
+          
            if( $bsa != "" ) //$bsa=$this->input->get_post('bsa'); //3=BSA
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -146,8 +130,10 @@ public function saveGEN()
                 $this->db->set('Lab', 3 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $bsa );
-                $this->db->insert($tb);
+           
            }
+           
+           
            if( $rr != "" ) // $rr=$this->input->get_post('rr'); //5=Respiratory Rate
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -155,8 +141,10 @@ public function saveGEN()
                 $this->db->set('Lab', 5 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $rr );
-                $this->db->insert($tb);
+           
            }
+           
+           
            if( $hr != "" ) // $hr=$this->input->get_post('hr'); //6=Heart Rate
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -164,8 +152,10 @@ public function saveGEN()
                 $this->db->set('Lab', 6 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $hr );
-                $this->db->insert($tb);
+              
            }
+           
+           
            if( $bp != "" ) //  $bp=$this->input->get_post('bp'); //7=Blood Pressure
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -173,8 +163,10 @@ public function saveGEN()
                 $this->db->set('Lab', 7 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $hr );
-                $this->db->insert($tb);
+         
            }
+           
+           
            if( $bt != "" ) //$bt=$this->input->get_post('bt'); //4=Body Temperature
            {
                 $this->db->set('MonitoringDate', $conv_MonitoringDate );
@@ -182,14 +174,17 @@ public function saveGEN()
                 $this->db->set('Lab', 4 );
                 $this->db->set('Clinic', 'Epilepsy Clinic' );  
                 $this->db->set('Value', $hr );
-                $this->db->insert($tb);
+            
            }
+           
+           
+           
            
        }
        
        public function delGEN()
        {
-                
+                $this->user_model->authensystem();
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -198,12 +193,11 @@ public function saveGEN()
                $HN=trim($this->input->get_post('HN')); 
                
                 $tb=$this->tb_main;
-                
-                
-               
+
               //  $this->db->where('MonitoringDate',$MonitoringDate );
                 $this->db->where('Lab',$Lab );
                 $this->db->where('HN',$HN );
+                $this->db->where("MonitoringDate", $MonitoringDate );
                 $ck=$this->db->delete($tb);
                
                 
@@ -229,6 +223,7 @@ public function saveGEN()
        
         public function  callGEN_HN()
        {
+            $this->user_model->authensystem();
           #http://localhost/ci/index.php/general/callGEN_HN/ES0597
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
@@ -244,6 +239,8 @@ public function saveGEN()
           // $tb="monitoring_04";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96','HN'=>$HN));
            $name=array(1,2,3,4,5,6,7);
+            $tbj2="laboratorytype_detail";
+             $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
            $this->db->where_in('Lab',$name);
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN));
            //$this->db->or_where($tb,array('Clinic'=>'Epilepsy Clinic','HN'=>$HN,'Lab'=>'96'));

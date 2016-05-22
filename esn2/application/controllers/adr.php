@@ -8,6 +8,7 @@ var  $name_app1="(Appendix 1 ) แบบบันทึกข้อมูลพ�
 
 //var  $tb_main="08-adr"; 
 var  $tb_main="adr_1";  
+//var  $tb_main="#mysql50#08-adr";
 
 
  
@@ -20,13 +21,77 @@ var  $tb_main="adr_1";
          $this->load->helper('date');
          $this->load->model('user_model');
          $this->load->library('session');
+         $this->load->model('date');
          
          //in(8,9,10,11,12,13,14,15,16,17,18,19,20,21,22)
          
        }
+       
+      
+       public function data_hn_dar()
+       {
+           $this->user_model->authensystem();
+           
+            //http://drugstore.kku.ac.th/esn2/index.php/adr/data_hn_dar/27/12/2555/gn2339
+             # http://drugstore.kku.ac.th/esn2/index.php/adr/data_hn_dar/
+           
+            $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
+             
+      
+            $d1=$this->uri->segment(3);
+            $d2=$this->uri->segment(4);
+            $d3=$this->uri->segment(5);
+            $HN=$this->uri->segment(6);
+            $dmy=  $d1."/".$d2."/".$d3  ;    #01/02/2553    => 27/12/2555
+            $tb=$this->tb_main;
+            $q=$this->db->get_where($tb,array("HN"=>$HN));
+              $va_arr = array(); 
+            foreach($q->result() as $row)
+            {
+                   $rows[]=$row;
+            }
+                   echo json_encode($rows);
+
+       }
+
+       public  function date_adr()
+       {
+          $this->user_model->authensystem();
+            # http://drugstore.kku.ac.th/esn2/index.php/adr/date_adr/
+           
+            # $this->load->model('user_model');
+             $this->user_model->authensystem();
+           
+            $tb=$this->tb_main;
+            $HN=$this->uri->segment(3);
+           $objquery=$this->db->get_where($tb,array("HN"=>$HN));
+        //   $objquery=$this->db->get($tb);
+           foreach($objquery->result() as $row )
+            {
+                $rows[]=$row;
+            }
+            echo  json_encode($rows);
+       }
+       
        # http://localhost/ci/index.php/adr/loadADR/
+       #http://drugstore.kku.ac.th/esn2/index.php/adr/loadADR/
        public  function loadADR()
        {
+           $this->user_model->authensystem();
+      
+           
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -41,6 +106,14 @@ var  $tb_main="adr_1";
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             //$this->db->order_by('MonitoringDate','DESC');
+           
+           $tbr="tb_result";
+           $this->db->join($tbr,$tb.".Response2=".$tbr.".id_result","left");
+           //{ field:'result_detail',title:'Result' },
+             
+             $tba="tb_action";
+             $this->db->join($tba,$tb.".Action2=".$tba.".id_action","left");
+                   
            $objquery=$this->db->get($tb,10,0);
            $va_arr = array(); 
            foreach($objquery->result() as $row )
@@ -54,8 +127,10 @@ var  $tb_main="adr_1";
        }
        
        
-       public  function loadADRHN()
+       public  function loadADRHN() # http://drugstore.kku.ac.th/esn2/index.php/adr/loadADRHN/AA0105
        {
+           $this->user_model->authensystem();
+           
            $HN=$this->uri->segment(3);
            $tb=$this->tb_main;
           // $tb_sub="laboratorytype";
@@ -71,6 +146,15 @@ var  $tb_main="adr_1";
           
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             //$this->db->order_by('MonitoringDate','DESC');
+           
+           
+           $tbr="tb_result";
+           $this->db->join($tbr,$tb.".Response2=".$tbr.".id_result","left");
+           
+              $tba="tb_action";
+             $this->db->join($tba,$tb.".Action2=".$tba.".id_action","left");
+   //{ field:'action_detail',title:'Action' }, 
+           
           $objquery=$this->db->get_where($tb,array("HN"=>$HN));
           // $objquery=$this->db->get($tb,10,0);
            $va_arr = array(); 
@@ -87,6 +171,9 @@ var  $tb_main="adr_1";
        # http://localhost/ci/index.php/chem/loadChem2/
        public  function loadChem2()
        {
+           $this->user_model->authensystem();
+           
+           
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -114,29 +201,34 @@ var  $tb_main="adr_1";
        
        public function  insertADR()
        {
-           $tb=$this->tb_main;
-           echo  $HN_adr=trim($this->input->get_post('HN_adr'));
-           echo "<br>";
-           echo  $MonitoringDate_adr=trim($this->input->get_post('MonitoringDate_adr'));
-           echo "<br>";
-           echo  $DRPselection2=trim($this->input->get_post('DRPselection2'));
-           echo  "<br>";
-           echo  $DRPDrug2=trim($this->input->get_post('DRPDrug2'));
-           echo "<br>";
-           echo $ADRDetail2=trim($this->input->get_post('ADRDetail2'));
-           echo "<br>";
-           echo  $Action2=trim($this->input->get_post('Action2'));
-           echo "<br>";
-           echo  $Response2=trim($this->input->get_post('Response2'));
-           echo "<br>";
-           echo  $ResponseDetail2=trim($this->input->get_post('ResponseDetail2'));
-           echo "<br>";
-           echo  $followup_adr=trim($this->input->get_post('followup_adr'));
-           echo "<br>";
-           echo  $week_adr=trim($this->input->get_post('week_adr'));
-           echo "<br>";
-           echo  $conv_week_adr=$this->user_model->databox_conv($week_adr);  
-           echo "<br>";
+           $this->user_model->authensystem();
+           
+           
+            $tb=$this->tb_main;
+            $HN_adr=trim($this->input->get_post('HN_adr'));
+        //   echo "<br>";
+            $MonitoringDate_adr=trim($this->input->get_post('MonitoringDate_adr'));
+          // echo "<br>";
+             $DRPselection2=trim($this->input->get_post('DRPselection2'));
+          // echo  "<br>";
+             $DRPDrug2=trim($this->input->get_post('DRPDrug2'));
+          // echo "<br>";
+            $ADRDetail2=trim($this->input->get_post('ADRDetail2'));
+          // echo "<br>";
+            $Action2=trim($this->input->get_post('Action2'));
+           //echo "<br>";
+             $Response2=trim($this->input->get_post('Response2'));
+        //   echo "<br>";
+             $ResponseDetail2=trim($this->input->get_post('ResponseDetail2'));
+           //echo "<br>";
+           $followup_adr=trim($this->input->get_post('followup_adr'));
+          // echo "<br>";
+             $week_adr=trim($this->input->get_post('week_adr'));
+          // echo "<br>";
+
+             $conv_week_adr =  $this->date->conv_date( $week_adr );
+          // echo "<br>";
+           
            
                 $this->db->set('HN', $HN_adr );
                 $this->db->set('MonitoringDate', $MonitoringDate_adr );
@@ -147,13 +239,26 @@ var  $tb_main="adr_1";
                 $this->db->set('Response2', $Response2 );
                 $this->db->set('ResponseDetail2', $ResponseDetail2 );
                 $this->db->set('followup_adr', $followup_adr );
-                $this->db->set('week_adr', $conv_week_adr );              
-                $this->db->insert($tb);  
+                $this->db->set('week_adr', $conv_week_adr );     
+                
+                
+                $ck=$this->db->insert($tb);  
+                if( $ck )
+                {
+                    echo "1";
+                }
+                else
+                {
+                    echo "0";
+                }
             
        }
        
        public  function  delADR()
        {
+           $this->user_model->authensystem();
+           
+           
            $tb=$this->tb_main;
            $HN=trim($this->uri->segment(3));
            $d=trim($this->uri->segment(4));
@@ -178,6 +283,10 @@ var  $tb_main="adr_1";
        public function saveChem1()
        {
          #http://localhost/ci/index.php/blood/saveBlood   
+           
+           $this->user_model->authensystem();
+           
+           
            $tb=$this->tb_main; 
            $HN_chem1= $this->input->get_post('HN_chem1');          
            $MonitoringDate_chem1=$this->input->get_post('MonitoringDate_chem1');
@@ -373,6 +482,10 @@ Albumin
        {
          #http://localhost/ci/index.php/blood/saveBlood   
            //$tb=$this->tb_main; 
+            
+            $this->user_model->authensystem();
+            
+            
            $tb="13_tdm2"; 
            $HN_tdm= $this->input->get_post('HN_tdm');          
            $MonitoringDate_tdm=$this->input->get_post('MonitoringDate_tdm');
@@ -445,6 +558,8 @@ Albumin
        public function delTDM()
        {
                 
+           $this->user_model->authensystem();
+           
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -484,6 +599,8 @@ Albumin
        
        public function delChem2()
        {
+                
+                $this->user_model->authensystem();
                 
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
@@ -532,6 +649,10 @@ Albumin
                     where  Lab = 95   and  HN='CQ1312'
             */
            //$HN="ES0597";
+            
+            $this->user_model->authensystem();
+            
+            
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;;
@@ -572,6 +693,10 @@ Albumin
                     where  Lab = 95   and  HN='CQ1312'
             */
            //$HN="ES0597";
+           
+           $this->user_model->authensystem();
+           
+           
            $HN=$this->uri->segment(3);
            //$tb="04__monitoring";
            $tb=$this->tb_main;
@@ -603,7 +728,7 @@ Albumin
        {
            //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/
            
-           
+           $this->user_model->authensystem();
           
            $HN=$this->uri->segment(3);
            $MonitoringDate=$this->uri->segment(4);
@@ -647,6 +772,9 @@ $this->db->where('id', $id);
 $this->db->update('mytable', $data); 
             */
            
+           $this->user_model->authensystem();
+           
+           
            $tb=$this->tb_main;
            $HN_tdm=$this->input->get_post('HN_tdm');
            $MonitoringDate_tdm=$this->input->get_post('MonitoringDate_tdm');
@@ -681,6 +809,10 @@ $this->db->update('mytable', $data);
        
         public  function  updateADR()
         {
+            
+            $this->user_model->authensystem();
+            
+            
            $tb=$this->tb_main;
            $HN_adr=$this->input->get_post('HN_adr');
            $MonitoringDate_adr=$this->input->get_post('MonitoringDate_adr');
@@ -726,6 +858,8 @@ $this->db->update('mytable', $data);
        
        function fetchADR()
        {
+           $this->user_model->authensystem();
+           
            $tb=$this->tb_main;
            $HN_adr=$this->uri->segment(3);
         

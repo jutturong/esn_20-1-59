@@ -124,6 +124,10 @@
                     <td>HN </td>
                     <td>
                         <input class="easyui-textbox"  name="HN_give" id="HN_give" style="height: 30px" data-options="required:true"></input>
+                        
+                        
+                        <a href="javascript:void(0)" class="easyui-linkbutton"    iconCls='icon-ok'   style="width:100px;height: 30px;"  onclick="   $('#view_give').dialog('open');  "     />View</a>
+                        
                     </td>
                 </tr>
                 <tr>
@@ -191,7 +195,7 @@
                  <tr>
                      <td colspan="2">
                         
-                         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'" style="width:120px" onclick="insertGive()">Save/Update</a>
+                         <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'" style="width:120px" onclick="insertGive()">Save</a>
                          
                          <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-remove'" style="width:80px" onclick=" javaScript: $('#win_give').window('close'); ">Close</a>
                     </td>
@@ -207,6 +211,120 @@
     <table class="easyui-datagrid" id="dg_give">
         
     </table>
+    
+    
+    <!-- give information view -->
+    <div  class="easyui-dialog"  id="view_give"  title="  A. Give Information History "   style="width:500px;height: 450px;padding: 10px;left:10px;top: 10px;"  data-options="
+          iconCls:'icon-large-chart',
+          closed:true,
+          buttons:[
+          {   text:'Close',iconCls:'icon-remove',handler:function(){   $('#view_give').dialog('close');  }    }
+          ]
+          
+          " >
+        
+        <div  style="padding: 10px;" >
+            Monitoring Date : <input class="easyui-combobox"   id="MonitoringDate_"  name="MonitoringDate_"   style="width:200px;height: 30px;"  
+                                     data-options="  
+                                     url:'<?=base_url()?>index.php/give/loadgive_byHN/' +  $('#HN_give').textbox('getValue')  ,
+                                     valueField:'MonitoringDate',
+                                     textField:'MonitoringDate',
+                                     onSelect:function()
+                                     {
+                                          var  dt = $('#MonitoringDate_').combobox('getValue');
+                                          var  HN= $('#HN_give').textbox('getValue');
+                                          var  url_ = 'http://drugstore.kku.ac.th/esn2/index.php/give/date_give/' + dt + '/' + HN ;
+                                           
+                                          //alert(url_);
+                                         /*
+                                            $.post(url_,function(data)
+                                            {   
+                                                      //alert(data);
+                                                      $.each(data,function(v,k)
+                                                      {  
+                                                            alert( k.GiveInformation1 );
+                                                      });
+                                            });
+                                           */
+                                           
+                                           $.getJSON(url_ ,function(data){
+                                                  $.each(data,function(v,k)
+                                                  {
+                                                           var   GiveInformation1 =  k.GiveInformation1;
+                                                             if( GiveInformation1 == 'Y' )
+                                                             {
+                                                                 $('#GiveInformation1_').attr('checked',true);
+                                                                 
+                                                             }
+                                                             
+                                                         var    GiveInformation2=k.GiveInformation2;
+                                                              if( GiveInformation2 == 'Y' )
+                                                             {
+                                                                 $('#GiveInformation2_').attr('checked',true);
+                                                                 
+                                                             }
+                                                             
+                                                              var    GiveInformation3=k.GiveInformation3;
+                                                              if( GiveInformation3 == 'Y' )
+                                                             {
+                                                                 $('#GiveInformation3_').attr('checked',true);
+                                                                 
+                                                             } 
+                                                             
+                                                             var    GiveInformation4=k.GiveInformation4;
+                                                              if( GiveInformation4 == 'Y' )
+                                                             {
+                                                                 $('#GiveInformation4_').attr('checked',true);
+                                                                 
+                                                             } 
+                                                             
+                                                               var    GiveInformation5=k.GiveInformation5;
+                                                              if( GiveInformation5 == 'Y' )
+                                                             {
+                                                                 $('#GiveInformation5_').attr('checked',true);
+                                                                 
+                                                             } 
+                                                             
+                                                             var  GiveInformation6=k.GiveInformation6;
+                                                             $('#GiveInformation6').textbox('setValue',GiveInformation6);
+                                                  });
+                                           });
+                                            
+                                     }
+                                     "
+                                     />
+        </div>
+        <div  style="padding: 10px;" >
+            <input type="checkbox"  id="GiveInformation1_"   /> What's your disease?
+        </div>
+        
+           <div  style="padding: 10px;" >
+               <input type="checkbox"   id="GiveInformation2_"  /> What's treatment?
+        </div>
+        
+           <div  style="padding: 10px;" >
+               <input type="checkbox"   id="GiveInformation3_" /> How to manage the side effect?
+        </div>
+        
+        <div  style="padding: 10px;"  >
+               <input type="checkbox"    id="GiveInformation4_"  /> Bring medication to each visit?
+            </div>
+        
+             <div  style="padding: 10px;" >
+                 <input type="checkbox"  id="GiveInformation5_"  /> How to correct behavior?
+            </div>
+        
+              <div  style="padding: 10px;" >
+                  Other :  <input class="easyui-textbox"    id="GiveInformation6_" 
+                                  style="width:200px;height: 50px;"
+                                  data-options="
+                                       multiline:true,
+                                      
+                                  "  />
+            </div>
+        
+    </div>
+    <!-- give information view -->
     
 </body>
 </html>

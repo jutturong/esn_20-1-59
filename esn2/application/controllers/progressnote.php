@@ -27,8 +27,11 @@ var  $tb_j1="user";
        }
        
        # http://localhost/ci/index.php/tdm/loadTdm/
+       // http://drugstore.kku.ac.th/esn2/index.php/progressnote/loadTdm/
        public  function loadTdm()
        {
+            $this->user_model->authensystem();
+            
            $tb=$this->tb_main;
           
            $objquery=$this->db->get($tb,10,0);
@@ -47,6 +50,8 @@ var  $tb_j1="user";
        # http://localhost/ci/index.php/progressnote/loadprogress/
        public  function loadprogress()
        {
+           $this->user_model->authensystem();
+               
            $tb=$this->tb_main;
            $tbj1=$this->tb_j1;
            $this->db->join($tbj1, $tb.".From=".$tbj1.".UserCode" , "INNER");
@@ -57,14 +62,14 @@ var  $tb_j1="user";
                
                  array_push($va_arr,$row);
             }
-             
-            
+
              echo json_encode($va_arr);
        }
        
        public function  fetchprogress()
        {
            //http://localhost/ci/index.php/progressnote/fetchprogress/ES0597
+             $this->user_model->authensystem();
           
           $HN=$this->uri->segment(3);                     
            //$MonitoringDate=$this->uri->segment(4);          
@@ -100,6 +105,8 @@ var  $tb_j1="user";
        # http://localhost/ci/index.php/progressnote/loadprogressHN/
        public  function loadprogressHN()
        {
+             $this->user_model->authensystem();
+             
            $HN=$this->uri->segment(3);
            
            $tb=$this->tb_main;
@@ -120,38 +127,44 @@ var  $tb_j1="user";
        # http://localhost/ci/index.php/progressnote/insertprogress/
       public  function insertprogress()
       {
+            $this->user_model->authensystem();
+            
           $tb=$this->tb_main;
-          $HN_pro=  addslashes($this->input->get_post('HN_pro'));
-          
-          $MonitoringDate_pro=addslashes($this->input->get_post('MonitoringDate_pro'));
-        // echo "<br>";
-          $Progress=  addslashes($this->input->get_post('Progress'));
-       //  echo "<br>";
-          $From=$this->input->get_post('From');
-        // echo "<br>";
+              $HN_pro=  addslashes($this->input->get_post('HN_pro'));
+          //echo "<br>";
+           $MonitoringDate_pro=addslashes($this->input->get_post('MonitoringDate_pro'));
+          //echo "<br>";
+            $Progress=  addslashes($this->input->get_post('Progress'));
+          //echo "<br>";
+           $From=$this->input->get_post('From');
+          //echo "<br>";
           $UserName=$this->input->get_post('UserName');
-       //  echo "<br>";
+          //echo "<br>";
           $UserSurname=$this->input->get_post('UserSurname');
-        // echo "<br>";
+         // echo "<br>";
           
                 $this->db->set('MonitoringDate', $MonitoringDate_pro );
                 $this->db->set('HN', $HN_pro );
                 $this->db->set('Clinic','Epilepsy Clinic');
                 $this->db->set('From',$From);
                 $this->db->set('Progress',$Progress);
-              $ck=  $this->db->insert($tb);  
+                $ck=  $this->db->insert($tb);  
+              
               if( $ck )
               {
                   echo "บันทึกข้อมูลสำเร็จ";
               }
-              elseif( !$ck )
+              else
               {
                   echo "ไม่สามารถบันทึกข้อมูลได้";
               }
+     
       }
        
        public  function updateprogress()
       {
+             $this->user_model->authensystem();
+             
           $tb=$this->tb_main;
           $HN_pro=  addslashes($this->input->get_post('HN_pro'));         
           $MonitoringDate_pro=addslashes($this->input->get_post('MonitoringDate_pro'));    
@@ -190,6 +203,8 @@ var  $tb_j1="user";
        # http://localhost/ci/index.php/chem/loadChem2/
        public  function loadChem2()
        {
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main;
            $tb_sub="laboratorytype";
           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'96'));
@@ -219,6 +234,8 @@ var  $tb_j1="user";
        public function saveChem1()
        {
          #http://localhost/ci/index.php/blood/saveBlood   
+             $this->user_model->authensystem();
+             
            $tb=$this->tb_main; 
            $HN_chem1= $this->input->get_post('HN_chem1');          
            $MonitoringDate_chem1=$this->input->get_post('MonitoringDate_chem1');
@@ -413,6 +430,7 @@ Albumin
         public function saveTDM()
        {
          #http://localhost/ci/index.php/blood/saveBlood   
+           $this->user_model->authensystem();
            //$tb=$this->tb_main; 
            $tb="13_tdm2"; 
            $HN_tdm= $this->input->get_post('HN_tdm');          
@@ -485,7 +503,7 @@ Albumin
        
        public function delprogress()
        {
- 
+   $this->user_model->authensystem();
                $HN=trim($this->input->get_post('HN')); 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                
@@ -509,7 +527,7 @@ Albumin
        
        public function delChem2()
        {
-                
+               $this->user_model->authensystem();   
                 
                $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
                //echo "<br>";
@@ -550,6 +568,7 @@ Albumin
         public function  callTdm_HN()
        {
           #http://localhost/ci/index.php/tdm/callTdm_HN/ES0597
+              $this->user_model->authensystem();
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
                      //ตัวอย่างทดสอบ  CQ1312
@@ -590,6 +609,7 @@ Albumin
        public function  callChem2_HN()
        {
           #http://localhost/ci/index.php/general/callGEN_HN/ES0597
+             $this->user_model->authensystem();
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
                      //ตัวอย่างทดสอบ  CQ1312
@@ -627,7 +647,7 @@ Albumin
        public function  fetchTDM()
        {
            //http://localhost/ci/index.php/tdm/fetchTDM/ES0597/
-          
+            $this->user_model->authensystem();
            $HN=$this->uri->segment(3);
            $MonitoringDate=$this->uri->segment(4);
            $tb=$this->tb_main;
@@ -654,7 +674,7 @@ Albumin
        
        public  function  updateTDM()
        {
-         
+           $this->user_model->authensystem();
            
            $tb=$this->tb_main;
            $HN_tdm=$this->input->get_post('HN_tdm');

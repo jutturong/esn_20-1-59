@@ -59,6 +59,7 @@ function destroyUser(){
      <th field="HN">HN</th>
    <!--  <th field="Lab">Lab</th>   -->
      <th field="Lab_detail">Lab</th>
+     
     <th field="Value">Imaging Result</th>
    
         
@@ -76,10 +77,10 @@ function destroyUser(){
 
 
 
-<div id="dlg_img" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+<div id="dlg_img" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px;left:10px;top:10px;"
      closed="true" buttons="#dlg-buttons" data-options="modal:true">
    
-    <form id="fm_img" method="post" novalidate>
+    <form id="fm_img"  action="<?=base_url()?>/index.php/welcome/saveIMG"  method="post"   novalidate="novalidate"  >
         <div class="fitem">
             <label>HN : </label>
            <!-- <input  class="easyui-textbox" id="HN_eeg" name="HN_eeg"   > -->
@@ -88,12 +89,12 @@ function destroyUser(){
         </div>
         <div class="fitem">
             <label>Date : </label>
-            <input  class="easyui-datebox" id="MonitoringDate_img" name="MonitoringDate_img" required="true">
+            <input  class="easyui-datebox" id="MonitoringDate_img" name="MonitoringDate_img" required="require" />
         </div>
         
         <div class="fitem">
             <label>Lab : </label>
-            <select class="easyui-combobox"  style="width:200px;" id="Value_img" name="Value_img" required="true">
+            <select class="easyui-combobox"  style="width:200px;" id="Value_img" name="Value_img"  required="require" >
                 <option value="">Not done</option>
                 <option value="96">96.CT brain</option>
                 <option value="97">97.MRI brain</option>
@@ -117,15 +118,18 @@ function destroyUser(){
         </div>
         -->
         
+        
+        
         <div class="fitem">
             <label>Imaging Result :</label>
             <input id="img_result" class="easyui-combobox" name="img_result" data-options="
                    valueField: 'ImagingResult',
                    textField: 'ImagingResult',
                    url:'<?=base_url()?>index.php/img/imagingresult',                 
-                   "
-                   >
+                   "   
+                     required="require"   />
         </div>
+        
         
         <!--
         <div class="fitem">
@@ -141,9 +145,37 @@ function destroyUser(){
             <input name="email" class="easyui-textbox" validType="email">
         </div>
         -->
-    </form>
+
 </div>
 <div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-add" onclick="saveUser()" style="width:90px">Save</a>
+    
+    <input type="submit"   onclick="
+                      $('#fm_img').form('submit',{
+                          //alert('t');
+                            success:function(data)
+                            {
+                                //alert(data);
+                                    if( data == '1' )
+                                    {
+                                          $.messager.alert('สถานะการบันทึกข้อมูล','บันทึกข้อมูลสำเร็จ','Info');
+                                          $('#tb_IMG').datagrid('reload');
+                                    }else if( data == '0' )
+                                    {
+                                           $.messager.alert('สถานะการบันทึกข้อมูล','บันทึกข้อมูลล้มเหลว','Err');
+                                            $('#tb_IMG').datagrid('reload');
+                                    }
+                            }
+                      });
+           "   />
+    
+    
+    
+    
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg_img').dialog('close');" style="width:90px">Cancel</a>
+
+    
+    </form>
+
+
+
 </div>

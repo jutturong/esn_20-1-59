@@ -63,8 +63,38 @@ class User_model extends CI_Model {
              */
              
          }
+         
+   function  databox_conv($dmy)// change  date format  y-m-d
+    {
+        if( strlen($dmy) > 0 )
+        {
+            //echo "T";
+            $ex=explode("/",$dmy);
+            return  $ex[2]."-".$ex[0]."-".$ex[1]; 
+        }
+    }
         
     }//end function
+    
+    function  authensystem()
+    {
+        # $this->load->model('user_model');
+        # $this->user_model->authensystem();
+        
+             $data['sess_username']=$this->session->userdata('sess_username'); //ตัวอย่างวิธีเรียกใช้
+            //echo  "<br>";
+             $sess_lastname=$this->session->userdata('sess_lastname');
+            //echo  "<br>";
+             $sess_usertype=$this->session->userdata('sess_usertype');
+            //echo  "<br>";
+             $sess_usercode=$this->session->userdata('sess_usercode');
+            //echo "<br>";
+             $sess_login=$this->session->userdata('sess_login');
+             
+             $this->user_model->checklogin($sess_login);
+             
+             
+    }
  
 }
 

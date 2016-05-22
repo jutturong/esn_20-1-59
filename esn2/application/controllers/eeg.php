@@ -21,13 +21,18 @@ var  $tb_main="04__monitoring";
        
        public function testcallEEG()
        {
-           #http://localhost/ci/index.php/eeg/testcallEEG
+            # http://drugstore.kku.ac.th/esn2/index.php/eeg/testcallEEG
+         
+             $this->user_model->authensystem();
+             
+       
             //$tb=$this->tb_main;
            // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'95'));
           
          
            $tb=$this->tb_main;
            $tbj1="laboratorytype2";
+           
           // $objquery= $this->db->get($tbj1);
           $objquery= $this->db->get_where($tb,array('Lab'=>'95'));//$tb.'.Clinic'=>'Epilepsy Clinic',
           $this->db->join($tbj1,$tbj1.".LabCode=".$tb.".Lab","right");
@@ -78,49 +83,51 @@ var  $tb_main="04__monitoring";
 
        public function  callEEG()
        {
-          #http://localhost/ci/index.php/eeg/callEEG
+          
            #http://drugstore.kku.ac.th/esn2/index.php/eeg/callEEG
-           
-           /*
-                    EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
-                     //ตัวอย่างทดสอบ  CQ1312
-                    select  * from  `monitoring_04`
-                    where  Lab = 95   and  HN='CQ1312'
-            */
-           
-             //$tb="04__monitoring";         
-             //  $tb="04_monitoring";
-             // $tb="monitoring_04";
-           // //SELECT * FROM `laboratorytype`     join  table detial
-           
+             $this->user_model->authensystem();
+             
+             /*
            $tb=$this->tb_main;
-          // $tbj1="laboratorytype";
-           //$tbj2="laboratorytype";
+           $tbj1="laboratorytype";
+       
            $tbj2="laboratorytype_detail";
            
+           
          
-           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");
+           $this->db->join($tbj2,$tb.".Lab=".$tbj2.".LabCode");         
            $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic','Lab'=>'95'));
-      
-           
-           
-           // $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'));
             $this->db->order_by('MonitoringDate','DESC');
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
                    $va_arr[]=$row;
-                // array_push($va_arr,$row);
+          
             }
              
             
              echo json_encode($va_arr);
-           
+           */
+             
+            $tb="04__monitoring";
+            $tbj1="laboratorytype";
+            $tbj2="listvalue_eeg";
+            $HN=$this->uri->segment(3);
+           // $this->db->order_by("")
+            $this->db->join($tbj1,$tb.".Lab=".$tbj1.".LabCode","left");
+            $this->db->join($tbj2,$tb.".Value=".$tbj2.".id_value");
+            $q=$this->db->get_where($tb,array($tb.".HN"=>$HN,$tb.".Lab"=>"95"));
+            foreach($q->result() as $row)
+            {
+                $rows[]=$row;
+            }
+            echo  json_encode($rows);
            
        }
        public function  callEEG_HN()
        {
           #http://localhost/ci/index.php/eeg/callEEG
+             $this->user_model->authensystem();
            /*
                     EEG =95  ดูใน value จะมีค่า 0,1,2 ให้เทียบในตาราง EEGresult
                      //ตัวอย่างทดสอบ  CQ1312
@@ -152,6 +159,8 @@ var  $tb_main="04__monitoring";
        public function saveEEG()
        {
            
+           #   http://drugstore.kku.ac.th/esn2/index.php/eeg/saveEEG
+             $this->user_model->authensystem();
                /*
                 $firstname = htmlspecialchars($_REQUEST['firstname']);
                 $lastname = htmlspecialchars($_REQUEST['lastname']);
@@ -222,6 +231,7 @@ var  $tb_main="04__monitoring";
        
        public function delEEG()
        {
+             $this->user_model->authensystem();
                 //echo "delEEG";          
                // $id = intval($_REQUEST['id']);
 
@@ -273,6 +283,8 @@ var  $tb_main="04__monitoring";
        }
        public function loadEEG()
        {
+             $this->user_model->authensystem();
+             
            $MonitoringDate=trim($this->input->get_post('MonitoringDate'));
            $tb=$this->tb_main;
            //$obj=$this->db->get_where($tb,array('MonitoringDate'=>$MonitoringDate));

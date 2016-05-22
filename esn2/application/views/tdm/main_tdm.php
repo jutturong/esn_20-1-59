@@ -96,6 +96,8 @@
                           $('#dg_tdm').datagrid('reload');
                      }
                    },
+                   
+                   /*
                    {
                      text:' แก้ไขข้อมูล ',
                      iconCls:' icon-cut ',
@@ -104,19 +106,17 @@
                         var  row=$('#dg_tdm').datagrid('getSelected');
                         if( row )
                         {
-                           //url= '<?=base_url()?>index.php/tdm/updateTDM/' +  row.HN + '/' + row.MonitoringDate ;            
+                             
                            $('#win_tdm').window('open');
                            $('#fr_tdm').form('load', '<?=base_url()?>index.php/tdm/fetchTDM/' +  row.HN  + '/' + row.MonitoringDate );
                            url = '<?=base_url()?>index.php/tdm/updateTDM/' +  row.HN + '/' +  row.MonitoringDate;
                            
-                           /*
-                           $('#fr_tdm').form('load',{
-                               HN_tdm:'HN',                              
-                           });
-                           */
+                        
                         }
                      },
                    }
+                   */
+                   
                    ]       
                
        ">

@@ -21,9 +21,21 @@ var  $name_app1="(Appendix 1 ) แบบบันทึกข้อมูลพ�
        {
            //http://drugstore.kku.ac.th/esn2/index.php/epilepsy/fetch_epi/GK3559
             // $HN="GK3559"; 
+            $this->user_model->authensystem();
+            
+            // AND     `04__monitoring`.`Clinic`='Epilepsy Clinic' 
            $HN=$this->uri->segment(3);
-           $tb="04__monitoring";
-           $objquery=$this->db->query(" SELECT * FROM `04__monitoring` LEFT JOIN `laboratorytype` ON `04__monitoring`.`Lab`=`laboratorytype`.`LabCode` WHERE `04__monitoring`.`Lab` IN ( 64, 66, 67, 101 )  AND  `04__monitoring`.`HN`='$HN'     ORDER BY `04__monitoring`.`MonitoringDate` DESC   ");
+          //$tb="04__monitoring";
+           $tb="`04__monitoring`";
+           $tbj2="`laboratorytype_detail`";
+           $tbj3="`tb_epilepsy_value`";
+           
+           $objquery=$this->db->query(" SELECT * FROM  $tb "
+                   . "LEFT JOIN `laboratorytype` ON $tb.`Lab`=`laboratorytype`.`LabCode`  "
+                   ." LEFT  JOIN  $tbj2  ON    $tb.`Lab`=$tbj2.`LabCode`   "
+                   . " JOIN    $tbj3   ON  $tb.`Value`=$tbj3.`id_epi_value`    "
+                   . "WHERE $tb.`Lab` IN ( 64, 66, 67, 101 )      AND   $tb.`Clinic`='Epilepsy Clinic'        "
+                   . "AND  $tb.`HN`='$HN'     ORDER BY $tb.`MonitoringDate` DESC   ");
            $va_arr = array(); 
            foreach($objquery->result() as $row )
             {
@@ -36,14 +48,19 @@ var  $name_app1="(Appendix 1 ) แบบบันทึกข้อมูลพ�
        
        
        # http://localhost/ci/index.php/epilepsy/value_monitoring/
+       # http://drugstore.kku.ac.th/esn2/index.php/epilepsy/value_monitoring/ES0597
        public function  value_monitoring()
        {
-                     
+          $this->user_model->authensystem();
+        
           // $HN="ES0597";
            //$tb="04-monitoring";
           //  $HN_epilepsy= $this->input->get_post('HN_epilepsy'); 
-           $tb="04__monitoring";
+           //$tb="04__monitoring";
+           $tb="`04__monitoring`";
            $tbj1="laboratorytype2";
+            $tbj2="`laboratorytype_detail`";
+            $tbj3="`tb_epilepsy_value`";
            
            //$this->db->join($tbj1,$tb.".Lab=".$tbj1.".Lab_value");
        //    $objquery=$this->db->get_where($tb,array('Clinic'=>'Epilepsy Clinic'),10,0);
@@ -60,8 +77,13 @@ LIMIT 0 , 30
         SELECT * FROM `04__monitoring` LEFT JOIN `laboratorytype` ON `04__monitoring`.`Lab`=`laboratorytype`.`LabCode` WHERE `04__monitoring`.`Lab` IN ( 64, 66, 67, 101 )
             */
           
-           
-           $objquery=$this->db->query(" SELECT * FROM `04__monitoring` LEFT JOIN `laboratorytype` ON `04__monitoring`.`Lab`=`laboratorytype`.`LabCode` WHERE `04__monitoring`.`Lab` IN ( 64, 66, 67, 101 )  ORDER BY `04__monitoring`.`MonitoringDate` DESC  Limit  0,10 ");
+            //SELECT * FROM `04__monitoring` WHERE `Clinic`='Epilepsy Clinic' ORDER BY `Clinic` ASC 
+           //  `04__monitoring`.`Clinic`='Epilepsy Clinic'    AND
+          $objquery=$this->db->query(" SELECT * FROM   $tb  LEFT "
+                   . "JOIN `laboratorytype` ON $tb.`Lab`=`laboratorytype`.`LabCode` "
+                   ."  JOIN    $tbj2  ON  $tb.`Lab`=$tbj2.`LabCode`  "
+                   . " JOIN    $tbj3   ON  $tb.`Value`=$tbj3.`id_epi_value`    "
+                   . "WHERE      $tb.`Lab` IN ( 64, 66, 67, 101 )   AND   $tb.`Clinic`='Epilepsy Clinic'     ORDER BY   $tb.`MonitoringDate` DESC  Limit  0,10 ");
            //SELECT * FROM `04__monitoring` LEFT JOIN `laboratorytype` ON `04__monitoring`.`Lab`=`laboratorytype`.`LabCode` WHERE `04__monitoring`.`Lab` IN ( 64, 66, 67, 101 ) ORDER BY `04__monitoring`.`MonitoringDate` DESC Limit 0,10 
            //DELETE    FROM    `04__monitoring` WHERE `MonitoringDate`='' 
            
@@ -85,6 +107,8 @@ LIMIT 0 , 30
        
        public function insert_epi()
        {
+               $this->user_model->authensystem();
+
                  $HN_epilepsy=$this->input->get_post('HN_epilepsy');
              //echo  br();
                 $frequency=$this->input->get_post('frequency'); //64
@@ -116,6 +140,7 @@ LIMIT 0 , 30
              $this->db->set('Lab', '64' );   
              $this->db->set('Value', $frequency ); 
              $this->db->set('MonitoringDate',$conDMY);
+             $this->db->set('Clinic','Epilepsy Clinic');
              $ck64=$this->db->insert($tb);
              
              /*
@@ -139,6 +164,7 @@ LIMIT 0 , 30
              $this->db->set('Lab', '66' );   
              $this->db->set('Value', $clinic_response ); 
              $this->db->set('MonitoringDate',$conDMY);
+             $this->db->set('Clinic','Epilepsy Clinic');
              $ck66=$this->db->insert($tb);
              
              /*
@@ -161,6 +187,7 @@ LIMIT 0 , 30
              $this->db->set('Lab', '101' );   
              $this->db->set('Value',  $Duration_of_Attack ); 
              $this->db->set('MonitoringDate',$conDMY);
+             $this->db->set('Clinic','Epilepsy Clinic');
              $ck101=$this->db->insert($tb);
              
              /*
@@ -183,6 +210,7 @@ LIMIT 0 , 30
              $this->db->set('Lab', '67' );   
              $this->db->set('Value',   $Severity_of_Attack ); 
              $this->db->set('MonitoringDate',$conDMY);
+             $this->db->set('Clinic','Epilepsy Clinic');
              $ck67=$this->db->insert($tb);
              
              /*
